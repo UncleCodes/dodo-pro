@@ -1,0 +1,263 @@
+@charset "utf-8";
+
+th{
+	white-space: nowrap;
+}
+/* ---------- Form ---------- */
+.validateError {
+    color: #FFB042;
+    line-height: 23px;
+    padding-left: 6px;
+}
+
+/* ---------- Icon ---------- */
+
+.trueIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px 0px;
+}
+
+.falseIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -60px;
+}
+
+.addIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -120px;
+}
+
+.removeIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -180px;
+}
+
+.upIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -240px;
+}
+
+.downIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -300px;
+}
+.deleteIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	cursor: pointer;
+	background: url(../images/base_icon.gif) no-repeat 0px -360px;
+}
+
+.infoIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	cursor: pointer;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -420px;
+}
+
+.warnIcon {
+	width: 16px;
+	height: 29px;
+	line-height: 29px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	background: url(../images/base_icon.gif) no-repeat 0px -480px;
+}
+
+.loadingIcon {
+	width: 20px;
+	height: 20px;
+	line-height: 20px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	vertical-align: middle;
+	background: url(../images/base_loading_icon.gif) center no-repeat;
+}
+
+.validateErrorContainer {
+	line-height: 20px;
+	display: none;
+	clear: both;
+	padding: 5px 8px;
+	margin: 5px;
+	border: 1px solid #febe8f;
+	background-color: #fff8d9;
+}
+
+.validateErrorContainer .validateErrorTitle {
+	height: 30px;
+	line-height: 30px;
+	clear: both;
+	font-weight: bold;
+	padding-left: 35px;
+	background: url(../images/base_icon.gif) 0px -540px no-repeat;
+}
+
+.validateErrorContainer li {
+	padding-left: 35px;
+}
+
+
+input.validateError {
+	background-color: #fff8ef;
+	border: dotted 1px #ff9b10;
+}
+
+select.validateError {
+	background-color: #fff8ef;
+	border: dotted 1px #ff9b10;
+}
+
+/* ---------- Other ---------- */
+
+.warnInfo {
+	line-height: 30px;
+	padding: 5px 5px 5px 20px;
+	border: 1px solid #ffca80;
+	background: url(../images/base_icon.gif) no-repeat 0px -420px #fffee2;
+	white-space: normal;
+	margin-left: 20px;
+}
+
+/* ---------- Common ---------- */
+.white {
+	color: white;
+}
+
+.black {
+	color: black;
+}
+
+.gray {
+	color: gray;
+}
+
+.blue {
+	color: blue;
+}
+
+.green {
+	color: green;
+}
+
+.red {
+	color: red;
+}
+
+.blank {
+	width: 100%;
+	height: 10px;
+	clear: both;
+	overflow: hidden;
+}
+
+.clear {
+	width: 100%;
+	height: 0px;
+	clear: both;
+	overflow: hidden;
+}
+
+.hidden {
+	display: none;
+}
+
+.lineThrough {
+	text-decoration: line-through;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.excelIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	background: url(../images/icon_excel.gif) no-repeat 0px 0px;
+}
+
+.wordIcon {
+	width: 24px;
+	height: 24px;
+	line-height: 24px;
+	display: inline-block;
+	display: -moz-inline-stack;
+	zoom: 1;
+	*display: inline;
+	background: url(../images/icon_doc.gif) no-repeat 0px 0px;
+}
+
+.errorAttr{
+	border:2px solid #FF0000;
+}
+.dodo_file_pic{
+	width:240px;
+}
