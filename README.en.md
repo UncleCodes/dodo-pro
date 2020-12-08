@@ -25,7 +25,7 @@
 **中小型Java Web系统、APP或者小程序的后台管理系统，基本上生成无须或者很少改动。让精力更加focus在业务逻辑上。**
 
 ## 共十一套页面模板
-**Classic版本支持10套模板，Pro版本支持1套模板**![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)
+**Classic版本<https://gitee.com/uncle.code/dodo>支持10套模板，Pro版本支持1套模板**![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)
 
 
 ## 示例效果图
@@ -48,7 +48,7 @@
 
 ```java
  
-    @DodoField(name = "产品名称", sortSeq = 0, isRemoteCheck = true)
+    @DodoField(name = "产品名称", sortSeq = 0, isRemoteCheck = true, regExp="[A-Za-z0-9]+",regExpTip="只允许输入数字和26个英文字母")
     private String            name;
 
     @DodoField(name = "产品描述", sortSeq = 5, listable = false, isnullable = false, isRichText = true)
