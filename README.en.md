@@ -25,7 +25,7 @@
 **中小型Java Web系统、APP或者小程序的后台管理系统，基本上生成无须或者很少改动。让精力更加focus在业务逻辑上。**
 
 ## 共十一套页面模板
-**Classic版本<https://gitee.com/uncle.code/dodo>支持10套模板，Pro版本支持1套模板**![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)
+**Classic版本<https://github.com/UncleCodes/dodo>支持10套模板，Pro版本支持1套模板**![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)![](https://www.0yi0.com/doc/images/hot.gif)
 
 
 ## 示例效果图
