@@ -46,4 +46,6 @@ public @interface DodoEntity {
     public DodoMenu levelThree();
 
     public boolean singleRecord() default false;
+
+    public DodoOrderBy[] defaultOrderBy() default {};
 }

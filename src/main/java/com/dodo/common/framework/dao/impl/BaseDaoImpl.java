@@ -25,6 +25,8 @@ import org.hibernate.type.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
+import com.dodo.common.annotation.action.DodoEntity;
+import com.dodo.common.annotation.action.DodoOrderBy;
 import com.dodo.common.database.data.Record;
 import com.dodo.common.database.data.Records;
 import com.dodo.common.database.hql.FetchField;
@@ -336,7 +338,7 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public List<T> getEntitys() {
-        return getSession().createQuery("from " + clazz.getName() + " as entity order by entity.createDate desc")
+        return getSession().createQuery("from " + clazz.getName() + " as entity order by entity.id desc")
                 .setCacheable(true).list();
     }
 
@@ -344,6 +346,10 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
     @SuppressWarnings("unchecked")
     @Override
     public List<T> getEntitys(HqlHelper hqlHelper) {
+        if (hqlHelper.getOrderByConditions().size() == 0) {
+            addDefaultOrderBy(hqlHelper);
+        }
+
         Assert.isTrue(hqlHelper.getFromClazz().equals(clazz), "HqlHelper.fromClazz doesn't match the service.");
         Query<T> query = getQuery(hqlHelper.getQueryParameters(), hqlHelper.getOrderByConditions(), null, null, false,
                 false, null, null, hqlHelper.getJoinDomains());
@@ -362,10 +368,25 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
         return query.list();
     }
 
+    private void addDefaultOrderBy(HqlHelper hqlHelper) {
+        DodoEntity dodoEntity = hqlHelper.getFromClazz().getAnnotation(DodoEntity.class);
+        DodoOrderBy[] defaultOrderBies = dodoEntity.defaultOrderBy();
+        if (defaultOrderBies != null && defaultOrderBies.length > 0) {
+            for (DodoOrderBy orderBy : defaultOrderBies) {
+                hqlHelper.orderBy(orderBy.fieldName(),
+                        orderBy.orderType() == com.dodo.common.annotation.action.OrderType.DESC ? OrderType.desc
+                                : OrderType.asc);
+            }
+        }
+    }
+
     @Override
     public PageModel getEntitysPager(HqlHelper hqlHelper, PageModel pageModel) {
         Assert.isTrue(hqlHelper.getFromClazz().equals(clazz), "HqlHelper.fromClazz doesn't match the service.");
         if (hqlHelper.getOrderByConditions().size() == 0) {
+            if ("id".equals(pageModel.getOrderBy())) {
+                addDefaultOrderBy(hqlHelper);
+            }
             hqlHelper.orderBy(pageModel.getOrderBy(), pageModel.getOrder());
         }
         Query<?> query = getQuery(hqlHelper.getQueryParameters(), hqlHelper.getOrderByConditions(), null, null, false,
@@ -401,6 +422,9 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
         if (hqlHelper.getFetchFields().size() == 0) {
             throw new HqlHelperException("please give me some select fileds in select statement.");
         }
+        if (hqlHelper.getOrderByConditions().size() == 0) {
+            addDefaultOrderBy(hqlHelper);
+        }
         List<EntityFieldFetch> entityFieldFetchs = new ArrayList<EntityFieldFetch>();
         Query<Map<String, Object>> query = getQuery(hqlHelper.getQueryParameters(), hqlHelper.getOrderByConditions(),
                 null, null, isDistinct, hqlHelper.getIsEntityFieldSubSelect(), entityFieldFetchs,
@@ -430,6 +454,9 @@ public class BaseDaoImpl<T, ID extends Serializable> implements BaseDao<T, ID> {
         }
         List<EntityFieldFetch> entityFieldFetchs = new ArrayList<EntityFieldFetch>();
         if (hqlHelper.getOrderByConditions().size() == 0) {
+            if ("id".equals(pageModel.getOrderBy())) {
+                addDefaultOrderBy(hqlHelper);
+            }
             hqlHelper.orderBy(pageModel.getOrderBy(), pageModel.getOrder());
         }
         Query<Map<String, Object>> query = getQuery(hqlHelper.getQueryParameters(), hqlHelper.getOrderByConditions(),

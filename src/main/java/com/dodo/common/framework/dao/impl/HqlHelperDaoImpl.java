@@ -29,6 +29,8 @@ import org.hibernate.type.SortedMapType;
 import org.hibernate.type.Type;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
+import com.dodo.common.annotation.action.DodoEntity;
+import com.dodo.common.annotation.action.DodoOrderBy;
 import com.dodo.common.database.data.Record;
 import com.dodo.common.database.data.Records;
 import com.dodo.common.database.hql.DBException;
@@ -331,7 +333,7 @@ public class HqlHelperDaoImpl implements HqlHelperDao {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends BaseEntity> List<T> getEntitys(Class<T> clazz) {
-        return getSession().createQuery("from " + clazz.getName() + " as entity order by entity.createDate desc")
+        return getSession().createQuery("from " + clazz.getName() + " as entity order by entity.id desc")
                 .setCacheable(true).list();
     }
 
@@ -339,6 +341,9 @@ public class HqlHelperDaoImpl implements HqlHelperDao {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends BaseEntity> List<T> getEntitys(HqlHelper hqlHelper) {
+        if (hqlHelper.getOrderByConditions().size() == 0) {
+            addDefaultOrderBy(hqlHelper);
+        }
         Query<T> query = getQuery(hqlHelper.getFromClazz(), hqlHelper.getQueryParameters(),
                 hqlHelper.getOrderByConditions(), null, null, false, false, null, null, hqlHelper.getJoinDomains());
         if (hqlHelper.getFirstResult() != null) {
@@ -356,9 +361,24 @@ public class HqlHelperDaoImpl implements HqlHelperDao {
         return query.list();
     }
 
+    private void addDefaultOrderBy(HqlHelper hqlHelper) {
+        DodoEntity dodoEntity = hqlHelper.getFromClazz().getAnnotation(DodoEntity.class);
+        DodoOrderBy[] defaultOrderBies = dodoEntity.defaultOrderBy();
+        if (defaultOrderBies != null && defaultOrderBies.length > 0) {
+            for (DodoOrderBy orderBy : defaultOrderBies) {
+                hqlHelper.orderBy(orderBy.fieldName(),
+                        orderBy.orderType() == com.dodo.common.annotation.action.OrderType.DESC ? OrderType.desc
+                                : OrderType.asc);
+            }
+        }
+    }
+
     @Override
     public <T extends BaseEntity> PageModel getEntitysPager(HqlHelper hqlHelper, PageModel pageModel) {
         if (hqlHelper.getOrderByConditions().size() == 0) {
+            if ("id".equals(pageModel.getOrderBy())) {
+                addDefaultOrderBy(hqlHelper);
+            }
             hqlHelper.orderBy(pageModel.getOrderBy(), pageModel.getOrder());
         }
         Query<?> query = getQuery(hqlHelper.getFromClazz(), hqlHelper.getQueryParameters(),
@@ -391,6 +411,9 @@ public class HqlHelperDaoImpl implements HqlHelperDao {
     public <T extends BaseEntity> Records getRecords(HqlHelper hqlHelper, boolean isDistinct) {
         if (hqlHelper.getFetchFields().size() == 0) {
             throw new HqlHelperException("please give me some select fileds in select statement.");
+        }
+        if (hqlHelper.getOrderByConditions().size() == 0) {
+            addDefaultOrderBy(hqlHelper);
         }
         List<EntityFieldFetch> entityFieldFetchs = new ArrayList<EntityFieldFetch>();
         Query<Map<String, Object>> query = getQuery(hqlHelper.getFromClazz(), hqlHelper.getQueryParameters(),
@@ -454,6 +477,9 @@ public class HqlHelperDaoImpl implements HqlHelperDao {
         }
         List<EntityFieldFetch> entityFieldFetchs = new ArrayList<EntityFieldFetch>();
         if (hqlHelper.getOrderByConditions().size() == 0) {
+            if ("id".equals(pageModel.getOrderBy())) {
+                addDefaultOrderBy(hqlHelper);
+            }
             hqlHelper.orderBy(pageModel.getOrderBy(), pageModel.getOrder());
         }
         Query<Map<String, Object>> query = getQuery(hqlHelper.getFromClazz(), hqlHelper.getQueryParameters(),
