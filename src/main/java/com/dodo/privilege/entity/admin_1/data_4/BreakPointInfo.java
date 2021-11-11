@@ -11,6 +11,7 @@ import com.dodo.common.annotation.action.DodoEntity;
 import com.dodo.common.annotation.field.DodoField;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.annotation.right.DodoRowRight;
+import com.dodo.common.annotation.right.DodoRowRightGroup;
 import com.dodo.common.framework.entity.BaseEntity;
 import com.dodo.privilege.entity.admin_1.base_1.Admin;
 
@@ -31,7 +32,7 @@ import com.dodo.privilege.entity.admin_1.base_1.Admin;
         levelOne = @DodoMenu(nameKey = "dodo.privilege.admin.menuNameKey", sortSeq = 1),
         levelTwo = @DodoMenu(nameKey = "dodo.privilege.admin.data.menuNameKey", sortSeq = 4),
         levelThree = @DodoMenu(nameKey = "dodo.privilege.admin.data.BreakPointInfo.menuNameKey", sortSeq = 3))
-@DodoRowRight(entityProperty = "admin")
+@DodoRowRightGroup({ @DodoRowRight(entityProperty = "admin") })
 public class BreakPointInfo extends BaseEntity {
     private static final long serialVersionUID = -5940620771612943217L;
 

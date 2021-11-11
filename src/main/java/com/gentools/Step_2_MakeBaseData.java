@@ -25,6 +25,7 @@ import com.dodo.common.annotation.right.DodoButtonRight;
 import com.dodo.common.annotation.right.DodoButtonRightEvent;
 import com.dodo.common.annotation.right.DodoButtonRights;
 import com.dodo.common.annotation.right.DodoRowRight;
+import com.dodo.common.annotation.right.DodoRowRightGroup;
 import com.dodo.common.annotation.right.DodoRowRights;
 import com.dodo.common.annotation.tree.DodoTreeRef;
 import com.dodo.common.enums.EnumInterface;
@@ -503,72 +504,74 @@ class MakeBaseDataUtil {
                 continue;
             }
 
-            DodoRowRight[] rowRights = null;
+            DodoRowRightGroup[] rowRightGroups = null;
             if (clazz.isAnnotationPresent(DodoRowRights.class)) {
-                rowRights = clazz.getAnnotation(DodoRowRights.class).value();
-            } else if (clazz.isAnnotationPresent(DodoRowRight.class)) {
-                rowRights = new DodoRowRight[] { clazz.getAnnotation(DodoRowRight.class) };
+                rowRightGroups = clazz.getAnnotation(DodoRowRights.class).value();
+            } else if (clazz.isAnnotationPresent(DodoRowRightGroup.class)) {
+                rowRightGroups = new DodoRowRightGroup[] { clazz.getAnnotation(DodoRowRightGroup.class) };
             }
 
-            if (rowRights != null) {
-                for (DodoRowRight right : rowRights) {
-                    if (!"this".equals(right.entityProperty().trim())) {
-                        java.lang.reflect.Field field = clazz.getDeclaredField(right.entityProperty().trim());
-                        if (!CommonUtil.isBaseEntity(field.getType())) {
-                            if (session
-                                    .createQuery(
-                                            "select t from ExtendModel t join t.entity e where e.className=:className and t.extFieldName=:extFieldName")
-                                    .setParameter("extFieldName", right.principalKey())
-                                    .setParameter("className", Role.class.getName()).uniqueResult() != null) {
-                                continue;
-                            }
-                            ExtendModel extendModel = new ExtendModel();
-                            extendModel.setEntity((com.dodo.privilege.entity.admin_1.config_5.Entity) session
-                                    .createQuery("from Entity r where r.className=:className")
-                                    .setParameter("className", Role.class.getName()).uniqueResult());
-                            extendModel.setExtFieldName(right.principalKey());
-                            if (CommonUtil.isEnumInterface(field.getType())) {
-                                extendModel.setFieldType(ExtendModelFieldType.CHECKBOX);
-                                StringBuilder valueList = new StringBuilder();
-                                StringBuilder labelList = new StringBuilder();
-                                EnumInterface[] objs = (EnumInterface[]) field.getType().getEnumConstants();
-                                for (EnumInterface obj : objs) {
-                                    valueList.append(obj.name()).append(",");
-                                    labelList.append(
-                                            StringUtils.isBlank(obj.getNameKey()) ? obj.getName() : obj.getNameKey())
-                                            .append(",");
+            if (rowRightGroups != null) {
+                for (DodoRowRightGroup rowRightGroup : rowRightGroups) {
+                    for (DodoRowRight right : rowRightGroup.value()) {
+                        if (!"this".equals(right.entityProperty().trim())) {
+                            java.lang.reflect.Field field = clazz.getDeclaredField(right.entityProperty().trim());
+                            if (!CommonUtil.isBaseEntity(field.getType())) {
+                                if (session
+                                        .createQuery(
+                                                "select t from ExtendModel t join t.entity e where e.className=:className and t.extFieldName=:extFieldName")
+                                        .setParameter("extFieldName", right.principalKey())
+                                        .setParameter("className", Role.class.getName()).uniqueResult() != null) {
+                                    continue;
                                 }
-                                extendModel.setLabelList(labelList.deleteCharAt(labelList.length() - 1).toString());
-                                extendModel.setValueList(valueList.deleteCharAt(valueList.length() - 1).toString());
-                            } else if (field.getType() == Boolean.class) {
-                                extendModel.setFieldType(ExtendModelFieldType.CHECKBOX);
-                                extendModel.setLabelList("dodo.common.yes,dodo.common.no");
-                                extendModel.setValueList("true,false");
-                            } else {
-                                extendModel.setFieldType(ExtendModelFieldType.STRING);
-                                extendModel.setInfoTipKey("dodo.infotip.rowrights.message");
+                                ExtendModel extendModel = new ExtendModel();
+                                extendModel.setEntity((com.dodo.privilege.entity.admin_1.config_5.Entity) session
+                                        .createQuery("from Entity r where r.className=:className")
+                                        .setParameter("className", Role.class.getName()).uniqueResult());
+                                extendModel.setExtFieldName(right.principalKey());
+                                if (CommonUtil.isEnumInterface(field.getType())) {
+                                    extendModel.setFieldType(ExtendModelFieldType.CHECKBOX);
+                                    StringBuilder valueList = new StringBuilder();
+                                    StringBuilder labelList = new StringBuilder();
+                                    EnumInterface[] objs = (EnumInterface[]) field.getType().getEnumConstants();
+                                    for (EnumInterface obj : objs) {
+                                        valueList.append(obj.name()).append(",");
+                                        labelList.append(
+                                                StringUtils.isBlank(obj.getNameKey()) ? obj.getName() : obj
+                                                        .getNameKey()).append(",");
+                                    }
+                                    extendModel.setLabelList(labelList.deleteCharAt(labelList.length() - 1).toString());
+                                    extendModel.setValueList(valueList.deleteCharAt(valueList.length() - 1).toString());
+                                } else if (field.getType() == Boolean.class) {
+                                    extendModel.setFieldType(ExtendModelFieldType.CHECKBOX);
+                                    extendModel.setLabelList("dodo.common.yes,dodo.common.no");
+                                    extendModel.setValueList("true,false");
+                                } else {
+                                    extendModel.setFieldType(ExtendModelFieldType.STRING);
+                                    extendModel.setInfoTipKey("dodo.infotip.rowrights.message");
+                                }
+                                extendModel.setExtShowName(right.principalKeyShowName());
+                                extendModel.setExtShowNameKey(right.principalKeyShowNameKey());
+                                extendModel.setAddable(Boolean.TRUE);
+                                extendModel.setEditable(Boolean.TRUE);
+                                extendModel.setNullable(Boolean.TRUE);
+                                extendModel.setMinLength(null);
+                                extendModel.setMaxLength(null);
+                                extendModel.setIsEmail(Boolean.FALSE);
+                                extendModel.setIsMobile(Boolean.FALSE);
+                                extendModel.setIsUrl(Boolean.FALSE);
+                                extendModel.setIsCreditcard(Boolean.FALSE);
+                                extendModel.setIsIp(Boolean.FALSE);
+                                extendModel.setMaxValue(null);
+                                extendModel.setMinValue(null);
+                                extendModel.setInfoTip(null);
+                                extendModel.setMaxFileSize(null);
+                                extendModel.setFileExts(null);
+                                extendModel.setCreateDate(new Date());
+                                extendModel.setModifyDate(new Date());
+                                extendModel.setSortSeq(0);
+                                session.save(extendModel);
                             }
-                            extendModel.setExtShowName(right.principalKeyShowName());
-                            extendModel.setExtShowNameKey(right.principalKeyShowNameKey());
-                            extendModel.setAddable(Boolean.TRUE);
-                            extendModel.setEditable(Boolean.TRUE);
-                            extendModel.setNullable(Boolean.TRUE);
-                            extendModel.setMinLength(null);
-                            extendModel.setMaxLength(null);
-                            extendModel.setIsEmail(Boolean.FALSE);
-                            extendModel.setIsMobile(Boolean.FALSE);
-                            extendModel.setIsUrl(Boolean.FALSE);
-                            extendModel.setIsCreditcard(Boolean.FALSE);
-                            extendModel.setIsIp(Boolean.FALSE);
-                            extendModel.setMaxValue(null);
-                            extendModel.setMinValue(null);
-                            extendModel.setInfoTip(null);
-                            extendModel.setMaxFileSize(null);
-                            extendModel.setFileExts(null);
-                            extendModel.setCreateDate(new Date());
-                            extendModel.setModifyDate(new Date());
-                            extendModel.setSortSeq(0);
-                            session.save(extendModel);
                         }
                     }
                 }

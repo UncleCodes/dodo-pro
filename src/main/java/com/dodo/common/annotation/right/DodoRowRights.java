@@ -24,5 +24,5 @@ import java.lang.annotation.Target;
 @Documented
 @Inherited
 public @interface DodoRowRights {
-    public DodoRowRight[] value();
+    public DodoRowRightGroup[] value();
 }

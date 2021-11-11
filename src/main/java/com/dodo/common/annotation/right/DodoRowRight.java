@@ -1,9 +1,7 @@
 package com.dodo.common.annotation.right;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -36,11 +34,10 @@ import com.dodo.privilege.entity.admin_1.base_1.Role;
  * @author dodo@bydodo.com
  * @version v 1.0
  */
-@Target(ElementType.TYPE)
+@Target({})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Repeatable(DodoRowRights.class)
 public @interface DodoRowRight {
     /**
      * 属性取值来源

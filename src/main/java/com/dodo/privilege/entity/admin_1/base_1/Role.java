@@ -23,6 +23,7 @@ import com.dodo.common.annotation.field.DodoField;
 import com.dodo.common.annotation.field.DodoShowColumn;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.annotation.right.DodoRowRight;
+import com.dodo.common.annotation.right.DodoRowRightGroup;
 import com.dodo.common.framework.entity.BaseEntity;
 import com.dodo.privilege.entity.admin_1.config_5.FieldRight;
 import com.dodo.privilege.entity.admin_1.config_5.Right;
@@ -44,7 +45,7 @@ import com.dodo.privilege.entity.admin_1.config_5.Right;
         levelOne = @DodoMenu(nameKey = "dodo.privilege.admin.menuNameKey", sortSeq = 1),
         levelTwo = @DodoMenu(nameKey = "dodo.privilege.admin.base.menuNameKey", sortSeq = 1),
         levelThree = @DodoMenu(nameKey = "dodo.privilege.admin.base.Role.menuNameKey", sortSeq = 2))
-@DodoRowRight(entityProperty = "admin")
+@DodoRowRightGroup({ @DodoRowRight(entityProperty = "admin") })
 public class Role extends BaseEntity {
     private static final long   serialVersionUID = -6614052029623997372L;
 

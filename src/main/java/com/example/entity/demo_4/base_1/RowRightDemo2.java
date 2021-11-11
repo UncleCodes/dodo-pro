@@ -11,6 +11,8 @@ import com.dodo.common.annotation.action.DodoEntity;
 import com.dodo.common.annotation.field.DodoField;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.annotation.right.DodoRowRight;
+import com.dodo.common.annotation.right.DodoRowRightGroup;
+import com.dodo.common.annotation.right.MapType;
 import com.dodo.common.framework.entity.BaseEntity;
 import com.example.enums.PersonKind;
 
@@ -31,7 +33,10 @@ import com.example.enums.PersonKind;
         levelOne = @DodoMenu(name = "Demo系统", sortSeq = 7),
         levelTwo = @DodoMenu(name = "基础演示", sortSeq = 1),
         levelThree = @DodoMenu(name = "行级权限演示(2)", sortSeq = 10))
-@DodoRowRight(entityProperty = "personKind", principalKey = "extPersonKind", principalKeyShowName = "行级权限Demo2：人员类别")
+@DodoRowRightGroup(mapType = MapType.AND, value = { @DodoRowRight(
+        entityProperty = "personKind",
+        principalKey = "extPersonKind",
+        principalKeyShowName = "行级权限Demo2：人员类别") })
 public class RowRightDemo2 extends BaseEntity {
 
     private static final long serialVersionUID = 2340857123849986982L;

@@ -11,6 +11,7 @@ import com.dodo.common.annotation.action.DodoEntity;
 import com.dodo.common.annotation.field.DodoField;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.annotation.right.DodoRowRight;
+import com.dodo.common.annotation.right.DodoRowRightGroup;
 import com.dodo.common.framework.entity.BaseEntity;
 import com.dodo.privilege.entity.admin_1.base_1.Admin;
 
@@ -31,7 +32,7 @@ import com.dodo.privilege.entity.admin_1.base_1.Admin;
         levelOne = @DodoMenu(name = "Demo系统", sortSeq = 7),
         levelTwo = @DodoMenu(name = "基础演示", sortSeq = 1),
         levelThree = @DodoMenu(name = "行级权限演示(1)", sortSeq = 9))
-@DodoRowRight(entityProperty = "addBy")
+@DodoRowRightGroup({ @DodoRowRight(entityProperty = "addBy") })
 public class RowRightDemo1 extends BaseEntity {
 
     private static final long serialVersionUID = 2340857123849986982L;
