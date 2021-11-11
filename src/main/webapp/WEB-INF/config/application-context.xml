@@ -236,6 +236,14 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean id="dynamicModuleServiceImpl" parent="txProxyTemplate">
+		<property name="target">
+			<bean class="com.dodo.common.framework.service.impl.DynamicModuleServiceImpl">
+				<property name="helperDao" ref="hqlHelperDaoImpl"/>
+			</bean>
+		</property>
+	</bean>
 	 
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">

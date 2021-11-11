@@ -34,6 +34,8 @@ import com.dodo.security.DodoMetadataSourceProvider;
 public class DataSourceProviderImpl implements DodoMetadataSourceProvider {
     private String[]         sqlReportDesignLink = { "/dbmeta.jhtml", "/queryType.jhtml", "/fieldType.jhtml",
             "/query.jhtml", "/easyui/query.jhtml", "/condition/exec.jhtml", "/saveOrUpdate.jhtml" };
+    private String[]         dynModuleDesignLink = { "/dbmeta.jhtml", "/queryType.jhtml", "/fieldType.jhtml",
+            "/query.jhtml", "/easyui/query.jhtml", "/condition/exec.jhtml", "/saveOrUpdate.jhtml" };
     private HqlHelperService hqlHelperService;
     private String           adminRootPath;
 
@@ -99,6 +101,16 @@ public class DataSourceProviderImpl implements DodoMetadataSourceProvider {
             if (rightLink.contains("/sqlreport/design.jhtml")) {
                 String prefixPath = StringUtils.substringBeforeLast(rightLink, "/");
                 for (String string : sqlReportDesignLink) {
+                    Collection<ConfigAttribute> tempConfigAttributes = new ArrayList<ConfigAttribute>();
+                    ConfigAttribute tempConfigAttribute = new SecurityConfig(rightCode);
+                    tempConfigAttributes.add(tempConfigAttribute);
+                    rMap.put(prefixPath + string, tempConfigAttributes);
+                }
+            }
+
+            if (rightLink.contains("/dynamicmodule/design.jhtml")) {
+                String prefixPath = StringUtils.substringBeforeLast(rightLink, "/");
+                for (String string : dynModuleDesignLink) {
                     Collection<ConfigAttribute> tempConfigAttributes = new ArrayList<ConfigAttribute>();
                     ConfigAttribute tempConfigAttribute = new SecurityConfig(rightCode);
                     tempConfigAttributes.add(tempConfigAttribute);
