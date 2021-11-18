@@ -37,7 +37,14 @@ import com.dodo.common.framework.entity.BaseEntity;
         path = "/top/ajax",
         model = DodoButtonRightModel.MODEL,
         location = DodoButtonLocation.TOP,
-        event = DodoButtonRightEvent.AJAX)
+        event = DodoButtonRightEvent.AJAX,
+        confirmMsg = "后台设置的提示语？")
+@DodoButtonRight(
+        name = "完善",
+        path = "/row/edit_check",
+        model = DodoButtonRightModel.ROW,
+        event = DodoButtonRightEvent.EDIT_PROPERTY,
+        editPropertys = { "field1" })
 @DodoButtonRight(
         name = "模块URL",
         path = "https://www.0yi0.com",
@@ -49,7 +56,8 @@ import com.dodo.common.framework.entity.BaseEntity;
         name = "行AJAX",
         path = "/row/ajax",
         model = DodoButtonRightModel.ROW,
-        event = DodoButtonRightEvent.AJAX)
+        event = DodoButtonRightEvent.AJAX,
+        confirmMsg = "今天心情好吗？")
 @DodoButtonRight(
         name = "后台URL",
         path = "${rootPath}/special/view.jhtml",

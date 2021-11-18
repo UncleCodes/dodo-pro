@@ -27,22 +27,22 @@ import java.lang.annotation.Target;
 @Repeatable(DodoButtonRights.class)
 public @interface DodoButtonRight {
     /**
-     * 按钮的显示文本名称</br> 该配置和<strong>nameKey</strong>属性只能二选一</br>
+     * 按钮的显示文本名称</br> 该配置和<strong>buttoKey</strong>属性只能二选一</br>
      * 
-     * @see DodoButtonRight#nameKey()
+     * @see DodoButtonRight#buttoKey()
      * */
     public String name() default "";
 
     /**
      * 按钮的显示文本名称Key 该Key来源于Spring资源文件 messages*.properties中的Key</br>
-     * 该配置和<strong>name</strong>属性只能二选一</br>
+     * 该配置和<strong>buttonName</strong>属性只能二选一</br>
      * 
-     * @see DodoButtonRight#name()
+     * @see DodoButtonRight#buttonName()
      * */
     public String nameKey() default "";
 
     /**
-     * 访问模式 打开URL方式 或者 ajax方式
+     * 访问模式 打开URL方式 、ajax方式 、弹窗编辑属性方式
      * 
      * @see DodoButtonRightEvent
      * */
@@ -52,7 +52,7 @@ public @interface DodoButtonRight {
      * <strong>【1】、当event = AJAX时，配置ajax访问地址，即：资源路径<br/>
      * </strong> 实际访问路径 = 后台根路径 + 模块路径 + path()<br/>
      * 配置示例：/cancel,/make/all,/test_make<br/>
-     * 此时会生成对应的ajax Controller层方法 <br/>
+     * <br/>
      * <strong>【2】、当event = URL时，配置需要打开的页面地址<br/>
      * </strong> 1、绝对路径，如https://www.bydodo.com<br/>
      * 2.1、相对于后台路径，如${rootPath}/xxx/xxx.jhtml<br/>
@@ -60,30 +60,34 @@ public @interface DodoButtonRight {
      * <strong>注：<br/>
      * ${rootPath} 代表配置文件中配置的后台管理总路径:dodo.backmanage.view.rootPath<br/>
      * ${webHomeUrl} 代表配置文件中配置的网站前台Url:dodo.common.config.web.homeurl<br/>
-     * </strong><br/>
-     * 跳转时，会携带参数：<br/>
-     * （1）如果是数据行按钮，则携带本行数据的ID，如：entityId=1160825085175668736<br/>
-     * （2）如果是模块按，则携带已选的数据的ID，如：entityIds=1207864625027227648,1160825085175668736
+     * </strong>
      * */
     public String path();
 
     /**
-     * 按钮模式：ROW=数据行按钮，MODEL=模块按钮
-     * 
+     * <strong>当event = AJAX时启用，ajax提交前的提示信息<br/>
+     * </strong>
+     * */
+    public String confirmMsg() default "";
+
+    /**
+     * <strong>当event = EDIT_PROPERTY时启用，需要编辑的字段名称<br/>
+     * </strong>
+     * */
+    public String[] editPropertys() default {};
+
+    /**
      * @see DodoButtonRightModel
      * */
     public DodoButtonRightModel model();
 
     /**
-     * 按钮显示的位置，model=DodoButtonRightModel.MODEL时启用，默认是在下方；取值：TOP=顶部，BOTTOM=底部<br/>
-     * <strong>Pro版本无此配置</strong>
-     * 
      * @see DodoButtonLocation
      * */
     public DodoButtonLocation location() default DodoButtonLocation.BOTTOM;
 
     /**
-     * 排列顺序，表示按钮出现的先后顺序，升序
+     * 排列顺序，表示按钮出现的先后顺序
      * */
     public int sortSeq() default 0;
 

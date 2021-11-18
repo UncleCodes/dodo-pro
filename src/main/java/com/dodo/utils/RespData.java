@@ -1,7 +1,8 @@
 package com.dodo.utils;
 
 /**
- * <p>Dodo Framework. <a href="https://www.bydodo.com">https://www.bydodo.com</a>
+ * <p>
+ * Dodo Framework. <a href="https://www.bydodo.com">https://www.bydodo.com</a>
  * 
  * @author uncle.code@bydodo.com
  * @author mingming@bydodo.com
@@ -30,6 +31,10 @@ public class RespData {
 
     public static RespData fail(int ec, String msg) {
         return new RespData(ec, msg, null);
+    }
+
+    public static RespData fail(String msg) {
+        return new RespData(400, msg, null);
     }
 
     public RespData() {
