@@ -49,7 +49,7 @@ import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
         event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         nameKey = "dodo.privilege.dynmodule.config.ModuleEntity.button.viewreport.namekey",
-        path = "${rootPath}/dynamicmodule/report.jhtml",
+        path = "${rootPath}/dynamicmodule/view.jhtml",
         model = DodoButtonRightModel.ROW,
         urlTarget = "_blank",
         event = DodoButtonRightEvent.URL)
@@ -61,7 +61,7 @@ import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
         urlTarget = "_blank",
         location = DodoButtonLocation.TOP)
 public class ModuleEntity extends BaseEntity {
-    private static final long serialVersionUID = -2026205118666904848L;
+    private static final long  serialVersionUID = -2026205118666904848L;
 
     @DodoField(
             sortSeq = 1,
@@ -69,7 +69,7 @@ public class ModuleEntity extends BaseEntity {
             isnullable = false,
             editable = false,
             queryParams = "ne(\"menuLevel\",com.dodo.common.annotation.menu.DodoMenuLevel.LEVEL3)")
-    private MenuInfo          menu;
+    private MenuInfo           menu;
 
     @DodoField(
             sortSeq = 2,
@@ -79,7 +79,7 @@ public class ModuleEntity extends BaseEntity {
             queryOnList = true,
             editable = false)
     @DodoShowColumn(sortSeq = 0)
-    private String            name;
+    private String             name;
 
     @DodoField(
             sortSeq = 3,
@@ -88,7 +88,7 @@ public class ModuleEntity extends BaseEntity {
             isTextArea = true,
             listable = false,
             editable = false)
-    private String            execSql;
+    private String             execSql;
 
     @DodoField(
             sortSeq = 4,
@@ -96,7 +96,15 @@ public class ModuleEntity extends BaseEntity {
             editable = false,
             addable = false,
             listable = false)
-    private List<ModuleField> moduleFields;
+    private List<ModuleField>  moduleFields;
+
+    @DodoField(
+            sortSeq = 4,
+            nameKey = "dodo.privilege.report.config.ModuleEntity.namekey.moduleButtons",
+            editable = false,
+            addable = false,
+            listable = false)
+    private List<ModuleButton> moduleButtons;
 
     @Column(length = 64)
     public String getName() {
@@ -106,6 +114,17 @@ public class ModuleEntity extends BaseEntity {
     @Column(length = 1024)
     public String getExecSql() {
         return execSql;
+    }
+
+    @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "moduleEntity")
+    @Fetch(FetchMode.SUBSELECT)
+    @OrderBy("sortSeq asc")
+    public List<ModuleButton> getModuleButtons() {
+        return moduleButtons;
+    }
+
+    public void setModuleButtons(List<ModuleButton> moduleButtons) {
+        this.moduleButtons = moduleButtons;
     }
 
     @OneToMany(cascade = { CascadeType.ALL }, mappedBy = "moduleEntity")

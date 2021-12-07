@@ -19,12 +19,21 @@ public class DynamicModuleDesignBean {
     private String        beforeConditionSELECT;
     private String        afterConditionSELECT;
     private String        execSql;
-    private List<String>  fieldName      = new ArrayList<String>();
-    private List<String>  fieldType      = new ArrayList<String>();
-    private List<String>  fieldLabel     = new ArrayList<String>();
-    private List<String>  jumpLink       = new ArrayList<String>();
-    private List<Boolean> fieldIsShow    = new ArrayList<Boolean>();
-    private List<String>  fieldQueryType = new ArrayList<String>();
+    private List<String>  fieldName       = new ArrayList<String>();
+    private List<String>  fieldType       = new ArrayList<String>();
+    private List<String>  fieldLabel      = new ArrayList<String>();
+    private List<String>  jumpLink        = new ArrayList<String>();
+    private List<Boolean> fieldIsShow     = new ArrayList<Boolean>();
+    private List<String>  fieldQueryType  = new ArrayList<String>();
+
+    private List<String>  btnName         = new ArrayList<String>();
+    private List<String>  btnLabel        = new ArrayList<String>();
+    private List<String>  btnEvent        = new ArrayList<String>();
+    private List<String>  btnModel        = new ArrayList<String>();
+    private List<String>  ajaxTip         = new ArrayList<String>();
+    private List<String>  paramValueField = new ArrayList<String>();
+    private List<String>  paramName       = new ArrayList<String>();
+    private List<String>  btnUrl          = new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -122,12 +131,79 @@ public class DynamicModuleDesignBean {
         this.menuSELECT = menuSELECT;
     }
 
+    public List<String> getBtnName() {
+        return btnName;
+    }
+
+    public void setBtnName(List<String> btnName) {
+        this.btnName = btnName;
+    }
+
+    public List<String> getBtnLabel() {
+        return btnLabel;
+    }
+
+    public void setBtnLabel(List<String> btnLabel) {
+        this.btnLabel = btnLabel;
+    }
+
+    public List<String> getBtnEvent() {
+        return btnEvent;
+    }
+
+    public void setBtnEvent(List<String> btnEvent) {
+        this.btnEvent = btnEvent;
+    }
+
+    public List<String> getAjaxTip() {
+        return ajaxTip;
+    }
+
+    public void setAjaxTip(List<String> ajaxTip) {
+        this.ajaxTip = ajaxTip;
+    }
+
+    public List<String> getParamValueField() {
+        return paramValueField;
+    }
+
+    public void setParamValueField(List<String> paramValueField) {
+        this.paramValueField = paramValueField;
+    }
+
+    public List<String> getParamName() {
+        return paramName;
+    }
+
+    public void setParamName(List<String> paramName) {
+        this.paramName = paramName;
+    }
+
+    public List<String> getBtnUrl() {
+        return btnUrl;
+    }
+
+    public void setBtnUrl(List<String> btnUrl) {
+        this.btnUrl = btnUrl;
+    }
+
+    public List<String> getBtnModel() {
+        return btnModel;
+    }
+
+    public void setBtnModel(List<String> btnModel) {
+        this.btnModel = btnModel;
+    }
+
     @Override
     public String toString() {
-        return "ReportDesignBean [menuSELECT=" + menuSELECT + ", updateModuleEntityId=" + updateModuleEntityId
+        return "DynamicModuleDesignBean [menuSELECT=" + menuSELECT + ", updateModuleEntityId=" + updateModuleEntityId
                 + ", name=" + name + ", beforeConditionSELECT=" + beforeConditionSELECT + ", afterConditionSELECT="
                 + afterConditionSELECT + ", execSql=" + execSql + ", fieldName=" + fieldName + ", fieldType="
                 + fieldType + ", fieldLabel=" + fieldLabel + ", jumpLink=" + jumpLink + ", fieldIsShow=" + fieldIsShow
-                + ", fieldQueryType=" + fieldQueryType + "]";
+                + ", fieldQueryType=" + fieldQueryType + ", btnName=" + btnName + ", btnLabel=" + btnLabel
+                + ", btnEvent=" + btnEvent + ", btnModel=" + btnModel + ", ajaxTip=" + ajaxTip + ", paramValueField="
+                + paramValueField + ", paramName=" + paramName + ", btnUrl=" + btnUrl + "]";
     }
+
 }

@@ -12,16 +12,17 @@ import com.dodo.common.annotation.report.ReportQueryType;
 import com.dodo.common.database.hql.HqlHelper;
 import com.dodo.common.database.hql.HqlHelper.MatchType;
 import com.dodo.common.dynamicmodule.DynamicModuleDesignBean;
-import com.dodo.common.dynamicmodule.DynamicModuleException;
 import com.dodo.common.framework.dao.HqlHelperDao;
 import com.dodo.common.framework.service.DynamicModuleService;
 import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
 import com.dodo.privilege.entity.admin_1.config_5.Right;
+import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleButton;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleEntity;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleField;
+import com.dodo.privilege.enums.ModuleButtonEvent;
+import com.dodo.privilege.enums.ModuleButtonModel;
 import com.dodo.security.DodoSecurityMetadataSource;
 import com.dodo.utils.CommonUtil;
-import com.dodo.utils.SpringUtil;
 import com.dodo.utils.config.DodoFrameworkConfigUtil;
 
 /**
@@ -58,6 +59,11 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             moduleEntity.setModuleFields(null);
             for (ModuleField field : fields) {
                 helperDao.delete(field);
+            }
+            List<ModuleButton> buttons = moduleEntity.getModuleButtons();
+            moduleEntity.setModuleButtons(null);
+            for (ModuleButton btn : buttons) {
+                helperDao.delete(btn);
             }
         } else {
             moduleEntity = new ModuleEntity();
@@ -109,7 +115,7 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             helperDao.save(right);
         } else {
             right.setRightName(moduleEntity.getName() + "_VIEW");
-            right.setRightRemark(null);
+            right.setRightRemark(null);// 必须
             helperDao.update(right);
         }
 
@@ -125,11 +131,63 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             helperDao.save(right);
         } else {
             right.setRightName(moduleEntity.getName() + "_Excel");
-            right.setRightRemark(null);
+            right.setRightRemark(null);// 必须
             helperDao.update(right);
         }
 
-        // 字段Href权限
+        // 按钮处理
+        String btnUrl = null;
+        String btnUrlRight = null;
+        for (int i = 0; i < designBean.getBtnName().size(); i++) {
+            if (StringUtils.isBlank(designBean.getBtnLabel().get(i))) {
+                continue;
+            }
+            ModuleButton moduleButton = new ModuleButton();
+            moduleButton.setModuleEntity(moduleEntity);
+            moduleButton.setBtnName(CommonUtil.escapeHtml(designBean.getBtnName().get(i)));
+            moduleButton.setBtnLabel(CommonUtil.escapeHtml(designBean.getBtnLabel().get(i)));
+            moduleButton.setBtnModel(ModuleButtonModel.valueOf(designBean.getBtnModel().get(i)));
+            moduleButton.setBtnEvent(ModuleButtonEvent.valueOf(designBean.getBtnEvent().get(i)));
+            moduleButton.setAjaxTip(CommonUtil.escapeHtml(designBean.getAjaxTip().get(i)));
+            moduleButton.setParamValueField(CommonUtil.escapeHtml(designBean.getParamValueField().get(i)));
+            moduleButton.setParamName(CommonUtil.escapeHtml(designBean.getParamName().get(i)));
+            moduleButton.setSortSeq(i);
+            btnUrl = designBean.getBtnUrl().get(i).trim();
+            moduleButton.setBtnUrl(btnUrl);
+            // 后台菜单
+            //            if (btnUrl.startsWith("{rootPath}")) {
+            //                btnUrlRight = StringUtils.substringBeforeLast(btnUrl, "?");
+            //                btnUrlRight = btnUrlRight.replace("{rootPath}", "");
+            //
+            //                // 获得一个权限
+            //                helper.resetQueryFrom(Right.class).eq("rightLink", btnUrlRight);
+            //                Right rightField = helperDao.getEntity(helper);
+            //                if (rightField == null) {
+            //                    rightField = new Right();
+            //                    rightField.setRightLink(btnUrlRight);
+            //                    rightField.setRightName(moduleEntity.getName() + "_BUTTON_" + moduleButton.getBtnLabel());
+            //                    rightField.setRightCode(getNextRightCodeCode());
+            //                    rightField.setMenuInfo(menuInfo);
+            //                    helperDao.save(rightField);
+            //                } else if (rightField.getMenuInfo() == null) {
+            //                    rightField.setRightName(moduleEntity.getName() + "_BUTTON_" + moduleButton.getBtnLabel());
+            //                    rightField.setMenuInfo(menuInfo);
+            //                    rightField.setRightRemark(null);// 必须
+            //                    helperDao.update(rightField);
+            //                } else if (((Object) rightField.getMenuInfo().getId()).equals((Object) menuInfo.getId())) {
+            //                    rightField.setRightRemark(null);// 必须
+            //                    helperDao.update(rightField);
+            //                }
+            //                // 链接已经在别的菜单下存在
+            //                else {
+            //                    throw new DynamicModuleException(SpringUtil.getMessageBack("dodo.dynmodule.duplicate.jumplink",
+            //                            new Object[] { btnUrl }, request));
+            //                }
+            //            }
+            helperDao.save(moduleButton);
+        }
+
+        // 字段保存 及字段权限处理
         String jumpLink = null;
         String jumpLinkRight = null;
         for (int i = 0; i < designBean.getFieldLabel().size(); i++) {
@@ -149,41 +207,41 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
                 jumpLink = jumpLink.trim();
                 moduleField.setJumpLink(jumpLink);
                 // 后台菜单
-                if (jumpLink.startsWith("{rootPath}")) {
-                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");
-                    jumpLinkRight = jumpLinkRight.replace("{rootPath}", "");
-
-                    // 获得一个权限
-                    helper.resetQueryFrom(Right.class).eq("rightLink", jumpLinkRight);
-                    Right rightField = helperDao.getEntity(helper);
-                    if (rightField == null) {
-                        rightField = new Right();
-                        rightField.setRightLink(jumpLinkRight);
-                        rightField.setRightName(moduleEntity.getName()
-                                + "_DETAIL_"
-                                + (StringUtils.isBlank(moduleField.getShowName()) ? CommonUtil.escapeHtml(moduleField
-                                        .getQueryField()) : moduleField.getShowName()));
-                        rightField.setRightCode(getNextRightCodeCode());
-                        rightField.setMenuInfo(menuInfo);
-                        helperDao.save(rightField);
-                    } else if (rightField.getMenuInfo() == null) {
-                        rightField.setRightName(moduleEntity.getName()
-                                + "_DETAIL_"
-                                + (StringUtils.isBlank(moduleField.getShowName()) ? CommonUtil.escapeHtml(moduleField
-                                        .getQueryField()) : moduleField.getShowName()));
-                        rightField.setMenuInfo(menuInfo);
-                        rightField.setRightRemark(null);
-                        helperDao.update(rightField);
-                    } else if (((Object) rightField.getMenuInfo().getId()).equals((Object) menuInfo.getId())) {
-                        rightField.setRightRemark(null);
-                        helperDao.update(rightField);
-                    }
-                    // 链接已经在别的菜单下存在
-                    else {
-                        throw new DynamicModuleException(SpringUtil.getMessageBack("dodo.dynmodule.duplicate.jumplink",
-                                new Object[] { jumpLink }, request));
-                    }
-                }
+                //                if (jumpLink.startsWith("{rootPath}")) {
+                //                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");
+                //                    jumpLinkRight = jumpLinkRight.replace("{rootPath}", "");
+                //
+                //                    // 获得一个权限
+                //                    helper.resetQueryFrom(Right.class).eq("rightLink", jumpLinkRight);
+                //                    Right rightField = helperDao.getEntity(helper);
+                //                    if (rightField == null) {
+                //                        rightField = new Right();
+                //                        rightField.setRightLink(jumpLinkRight);
+                //                        rightField.setRightName(moduleEntity.getName()
+                //                                + "_DETAIL_"
+                //                                + (StringUtils.isBlank(moduleField.getShowName()) ? CommonUtil.escapeHtml(moduleField
+                //                                        .getQueryField()) : moduleField.getShowName()));
+                //                        rightField.setRightCode(getNextRightCodeCode());
+                //                        rightField.setMenuInfo(menuInfo);
+                //                        helperDao.save(rightField);
+                //                    } else if (rightField.getMenuInfo() == null) {
+                //                        rightField.setRightName(moduleEntity.getName()
+                //                                + "_DETAIL_"
+                //                                + (StringUtils.isBlank(moduleField.getShowName()) ? CommonUtil.escapeHtml(moduleField
+                //                                        .getQueryField()) : moduleField.getShowName()));
+                //                        rightField.setMenuInfo(menuInfo);
+                //                        rightField.setRightRemark(null);// 必须
+                //                        helperDao.update(rightField);
+                //                    } else if (((Object) rightField.getMenuInfo().getId()).equals((Object) menuInfo.getId())) {
+                //                        rightField.setRightRemark(null);// 必须
+                //                        helperDao.update(rightField);
+                //                    }
+                //                    // 链接已经在别的菜单下存在
+                //                    else {
+                //                        throw new DynamicModuleException(SpringUtil.getMessageBack("dodo.dynmodule.duplicate.jumplink",
+                //                                new Object[] { jumpLink }, request));
+                //                    }
+                //                }
             }
             helperDao.save(moduleField);
         }
