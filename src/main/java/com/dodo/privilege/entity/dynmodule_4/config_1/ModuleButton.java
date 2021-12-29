@@ -60,38 +60,46 @@ public class ModuleButton extends BaseEntity {
 
     @DodoField(
             sortSeq = 3,
+            nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.showCond",
+            isnullable = false,
+            maxLength = 200)
+    @DodoShowColumn(sortSeq = 1)
+    private String            showCond;
+
+    @DodoField(
+            sortSeq = 4,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnModel",
             isnullable = false)
     private ModuleButtonModel btnModel;
 
     @DodoField(
-            sortSeq = 4,
+            sortSeq = 5,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnEvent",
             isnullable = false)
     private ModuleButtonEvent btnEvent;
 
     @DodoField(
-            sortSeq = 5,
+            sortSeq = 6,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.ajaxTip",
             isnullable = false,
             maxLength = 64)
     private String            ajaxTip;
 
     @DodoField(
-            sortSeq = 6,
+            sortSeq = 7,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramValueField",
             isnullable = false,
             maxLength = 64)
     private String            paramValueField;
 
     @DodoField(
-            sortSeq = 7,
+            sortSeq = 8,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramName",
             isnullable = false,
             maxLength = 64)
     private String            paramName;
 
-    @DodoField(sortSeq = 8, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
+    @DodoField(sortSeq = 9, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
     private String            btnUrl;
 
     @ManyToOne
@@ -175,6 +183,15 @@ public class ModuleButton extends BaseEntity {
 
     public void setBtnModel(ModuleButtonModel btnModel) {
         this.btnModel = btnModel;
+    }
+
+    @Column(length = 200)
+    public String getShowCond() {
+        return showCond;
+    }
+
+    public void setShowCond(String showCond) {
+        this.showCond = showCond;
     }
 
 }

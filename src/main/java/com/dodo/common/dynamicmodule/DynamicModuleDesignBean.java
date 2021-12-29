@@ -22,6 +22,7 @@ public class DynamicModuleDesignBean {
     private List<String>  fieldName       = new ArrayList<String>();
     private List<String>  fieldType       = new ArrayList<String>();
     private List<String>  fieldLabel      = new ArrayList<String>();
+    private List<String>  showCond        = new ArrayList<String>();
     private List<String>  jumpLink        = new ArrayList<String>();
     private List<Boolean> fieldIsShow     = new ArrayList<Boolean>();
     private List<String>  fieldQueryType  = new ArrayList<String>();
@@ -195,15 +196,23 @@ public class DynamicModuleDesignBean {
         this.btnModel = btnModel;
     }
 
+    public List<String> getShowCond() {
+        return showCond;
+    }
+
+    public void setShowCond(List<String> showCond) {
+        this.showCond = showCond;
+    }
+
     @Override
     public String toString() {
         return "DynamicModuleDesignBean [menuSELECT=" + menuSELECT + ", updateModuleEntityId=" + updateModuleEntityId
                 + ", name=" + name + ", beforeConditionSELECT=" + beforeConditionSELECT + ", afterConditionSELECT="
                 + afterConditionSELECT + ", execSql=" + execSql + ", fieldName=" + fieldName + ", fieldType="
-                + fieldType + ", fieldLabel=" + fieldLabel + ", jumpLink=" + jumpLink + ", fieldIsShow=" + fieldIsShow
-                + ", fieldQueryType=" + fieldQueryType + ", btnName=" + btnName + ", btnLabel=" + btnLabel
-                + ", btnEvent=" + btnEvent + ", btnModel=" + btnModel + ", ajaxTip=" + ajaxTip + ", paramValueField="
-                + paramValueField + ", paramName=" + paramName + ", btnUrl=" + btnUrl + "]";
+                + fieldType + ", fieldLabel=" + fieldLabel + ", showCond=" + showCond + ", jumpLink=" + jumpLink
+                + ", fieldIsShow=" + fieldIsShow + ", fieldQueryType=" + fieldQueryType + ", btnName=" + btnName
+                + ", btnLabel=" + btnLabel + ", btnEvent=" + btnEvent + ", btnModel=" + btnModel + ", ajaxTip="
+                + ajaxTip + ", paramValueField=" + paramValueField + ", paramName=" + paramName + ", btnUrl=" + btnUrl
+                + "]";
     }
-
 }
