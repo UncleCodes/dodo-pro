@@ -63,8 +63,14 @@ public class ModuleButton extends BaseEntity {
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.showCond",
             isnullable = false,
             maxLength = 200)
-    @DodoShowColumn(sortSeq = 1)
     private String            showCond;
+
+    @DodoField(
+            sortSeq = 3,
+            nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnStyle",
+            isnullable = false,
+            maxLength = 32)
+    private String            btnStyle;
 
     @DodoField(
             sortSeq = 4,
@@ -192,6 +198,15 @@ public class ModuleButton extends BaseEntity {
 
     public void setShowCond(String showCond) {
         this.showCond = showCond;
+    }
+
+    @Column(length = 32)
+    public String getBtnStyle() {
+        return btnStyle;
+    }
+
+    public void setBtnStyle(String btnStyle) {
+        this.btnStyle = btnStyle;
     }
 
 }

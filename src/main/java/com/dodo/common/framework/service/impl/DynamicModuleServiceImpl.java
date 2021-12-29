@@ -147,6 +147,7 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             moduleButton.setBtnName(CommonUtil.escapeHtml(designBean.getBtnName().get(i)));
             moduleButton.setBtnLabel(CommonUtil.escapeHtml(designBean.getBtnLabel().get(i)));
             moduleButton.setShowCond(designBean.getShowCond().get(i).trim());
+            moduleButton.setBtnStyle(designBean.getBtnStyle().get(i).trim());
             moduleButton.setBtnModel(ModuleButtonModel.valueOf(designBean.getBtnModel().get(i)));
             moduleButton.setBtnEvent(ModuleButtonEvent.valueOf(designBean.getBtnEvent().get(i)));
             moduleButton.setAjaxTip(CommonUtil.escapeHtml(designBean.getAjaxTip().get(i)));
