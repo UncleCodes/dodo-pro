@@ -58,7 +58,11 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             List<ModuleField> fields = moduleEntity.getModuleFields();
             moduleEntity.setModuleFields(null);
             for (ModuleField field : fields) {
-                helperDao.delete(field);
+                if (designBean.getFieldName().contains(field.getQueryField())) {
+                    designBean.getSameModuleField().put(field.getQueryField(), field);
+                } else {
+                    helperDao.delete(field);
+                }
             }
             List<ModuleButton> buttons = moduleEntity.getModuleButtons();
             moduleEntity.setModuleButtons(null);
@@ -193,11 +197,17 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
         String jumpLink = null;
         String jumpLinkRight = null;
         for (int i = 0; i < designBean.getFieldLabel().size(); i++) {
-            ModuleField moduleField = new ModuleField();
+            ModuleField moduleField = designBean.getSameModuleField().get(designBean.getFieldName().get(i));
+            if (moduleField == null) {
+                moduleField = new ModuleField();
+            }
+
             moduleField.setFieldType(ReportFieldType.valueOf(designBean.getFieldType().get(i)));
             moduleField.setQueryField(CommonUtil.escapeHtml(designBean.getFieldName().get(i)));
             if (StringUtils.isNotBlank(designBean.getFieldQueryType().get(i))) {
                 moduleField.setQueryType(ReportQueryType.valueOf(designBean.getFieldQueryType().get(i)));
+            } else {
+                moduleField.setQueryType(null);
             }
             moduleField.setModuleEntity(moduleEntity);
             moduleField.setShowName(CommonUtil.escapeHtml(designBean.getFieldLabel().get(i)));
@@ -245,7 +255,11 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
                 //                    }
                 //                }
             }
-            helperDao.save(moduleField);
+            if (StringUtils.isNotBlank(moduleField.getId())) {
+                helperDao.update(moduleField);
+            } else {
+                helperDao.save(moduleField);
+            }
         }
 
         // 更新失效权限

@@ -65,7 +65,11 @@ public class SqlReportServiceImpl implements SqlReportService {
             List<ReportField> fields = reportEntity.getReportFields();
             reportEntity.setReportFields(null);
             for (ReportField field : fields) {
-                helperDao.delete(field);
+                if (designBean.getFieldName().contains(field.getQueryField())) {
+                    designBean.getSameReportField().put(field.getQueryField(), field);
+                } else {
+                    helperDao.delete(field);
+                }
             }
         } else {
             reportEntity = new ReportEntity();
@@ -197,11 +201,16 @@ public class SqlReportServiceImpl implements SqlReportService {
         String jumpLink = null;
         String jumpLinkRight = null;
         for (int i = 0; i < designBean.getFieldLabel().size(); i++) {
-            ReportField reportField = new ReportField();
+            ReportField reportField = designBean.getSameReportField().get(designBean.getFieldName().get(i));
+            if (reportField == null) {
+                reportField = new ReportField();
+            }
             reportField.setFieldType(ReportFieldType.valueOf(designBean.getFieldType().get(i)));
             reportField.setQueryField(CommonUtil.escapeHtml(designBean.getFieldName().get(i)));
             if (StringUtils.isNotBlank(designBean.getFieldQueryType().get(i))) {
                 reportField.setQueryType(ReportQueryType.valueOf(designBean.getFieldQueryType().get(i)));
+            } else {
+                reportField.setQueryType(null);
             }
             reportField.setReportEntity(reportEntity);
             reportField.setShowName(CommonUtil.escapeHtml(designBean.getFieldLabel().get(i)));
@@ -249,7 +258,12 @@ public class SqlReportServiceImpl implements SqlReportService {
                     }
                 }
             }
-            helperDao.save(reportField);
+            if (StringUtils.isNotBlank(reportField.getId())) {
+                helperDao.update(reportField);
+            } else {
+                helperDao.save(reportField);
+            }
+
         }
 
         // 更新失效权限

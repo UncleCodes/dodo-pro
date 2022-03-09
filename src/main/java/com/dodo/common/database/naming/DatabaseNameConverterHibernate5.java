@@ -15,7 +15,7 @@ import org.hibernate.boot.model.naming.PhysicalNamingStrategy;
  * @version v 1.0
  */
 public class DatabaseNameConverterHibernate5 implements DatabaseNameConverter {
-
+    private String                 tablePrefix;
     private PhysicalNamingStrategy physicalNamingStrategy;
 
     public String getTableNameByClass(Class<?> clazz) {
@@ -37,5 +37,13 @@ public class DatabaseNameConverterHibernate5 implements DatabaseNameConverter {
 
     public void setPhysicalNamingStrategy(PhysicalNamingStrategy physicalNamingStrategy) {
         this.physicalNamingStrategy = physicalNamingStrategy;
+    }
+
+    public String getTablePrefix() {
+        return this.tablePrefix;
+    }
+
+    public void setTablePrefix(String paramString) {
+        this.tablePrefix = paramString;
     }
 }

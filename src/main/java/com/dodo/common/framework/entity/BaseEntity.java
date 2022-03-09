@@ -26,16 +26,37 @@ import com.dodo.common.annotation.field.DodoField;
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -6299018543295811572L;
 
-    @DodoField(nameKey = "dodo.common.bean.namekey.id", sortSeq = -3412, addable = false, editable = false, queryOnList = true)
+    @DodoField(
+            nameKey = "dodo.common.bean.namekey.id",
+            sortSeq = -3412,
+            addable = false,
+            editable = false,
+            queryOnList = true)
     protected String          id;
 
-    @DodoField(nameKey = "dodo.common.bean.namekey.createDate", sortSeq = 3412, addable = false, editable = false, listable = false)
+    @DodoField(
+            nameKey = "dodo.common.bean.namekey.createDate",
+            sortSeq = 3412,
+            addable = false,
+            editable = false,
+            listable = false)
     protected Date            createDate;
-    @DodoField(nameKey = "dodo.common.bean.namekey.modifyDate", sortSeq = 3413, addable = false, editable = false, listable = false)
+    @DodoField(
+            nameKey = "dodo.common.bean.namekey.modifyDate",
+            sortSeq = 3413,
+            addable = false,
+            editable = false,
+            listable = false)
     protected Date            modifyDate;
 
-    @DodoField(nameKey = "dodo.common.bean.namekey.sortSeq", sortSeq = 3414, addable = false, isDigits = true, min = Integer.MIN_VALUE
-            + "", max = Integer.MAX_VALUE + "", listable = false)
+    @DodoField(
+            nameKey = "dodo.common.bean.namekey.sortSeq",
+            sortSeq = 3414,
+            addable = false,
+            isDigits = true,
+            min = Integer.MIN_VALUE + "",
+            max = Integer.MAX_VALUE + "",
+            listable = false)
     protected Integer         sortSeq;
 
     /** 临时变量 **/
@@ -94,6 +115,10 @@ public class BaseEntity implements Serializable {
         this._excelRowIndex_ = _excelRowIndex_;
     }
 
+    public String entitySummary() {
+        return id;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -122,4 +147,5 @@ public class BaseEntity implements Serializable {
         }
         return true;
     }
+
 }

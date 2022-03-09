@@ -96,6 +96,7 @@
     </bean>	
 
 	<bean id="databaseNameConverterHibernate" class="com.dodo.common.database.naming.DatabaseNameConverterHibernate5">
+		<property name="tablePrefix" value="${dodo.database.namingstrategy.tablePrefix}" />
 		<property name="physicalNamingStrategy" ref="physicalNamingStrategy" />
     </bean>	
     

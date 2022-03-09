@@ -101,7 +101,7 @@ public class ModuleEntity extends BaseEntity {
 
     @DodoField(
             sortSeq = 4,
-            nameKey = "dodo.privilege.report.config.ModuleEntity.namekey.moduleButtons",
+            nameKey = "dodo.privilege.dynmodule.config.ModuleEntity.namekey.moduleButtons",
             editable = false,
             addable = false,
             listable = false)

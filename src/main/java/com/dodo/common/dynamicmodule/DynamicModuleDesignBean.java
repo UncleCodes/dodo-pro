@@ -1,7 +1,11 @@
 package com.dodo.common.dynamicmodule;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleField;
 
 /**
  * <p>
@@ -13,29 +17,32 @@ import java.util.List;
  * @version v 1.0
  */
 public class DynamicModuleDesignBean {
-    private String        menuSELECT;
-    private String        updateModuleEntityId;
-    private String        name;
-    private String        beforeConditionSELECT;
-    private String        afterConditionSELECT;
-    private String        execSql;
-    private List<String>  fieldName       = new ArrayList<String>();
-    private List<String>  fieldType       = new ArrayList<String>();
-    private List<String>  fieldLabel      = new ArrayList<String>();
-    private List<String>  jumpLink        = new ArrayList<String>();
-    private List<Boolean> fieldIsShow     = new ArrayList<Boolean>();
-    private List<String>  fieldQueryType  = new ArrayList<String>();
+    private String                   menuSELECT;
+    private String                   updateModuleEntityId;
+    private String                   name;
+    private String                   beforeConditionSELECT;
+    private String                   afterConditionSELECT;
+    private String                   execSql;
 
-    private List<String>  btnName         = new ArrayList<String>();
-    private List<String>  btnLabel        = new ArrayList<String>();
-    private List<String>  showCond        = new ArrayList<String>();
-    private List<String>  btnStyle        = new ArrayList<String>();
-    private List<String>  btnEvent        = new ArrayList<String>();
-    private List<String>  btnModel        = new ArrayList<String>();
-    private List<String>  ajaxTip         = new ArrayList<String>();
-    private List<String>  paramValueField = new ArrayList<String>();
-    private List<String>  paramName       = new ArrayList<String>();
-    private List<String>  btnUrl          = new ArrayList<String>();
+    private Map<String, ModuleField> sameModuleField = new HashMap<String, ModuleField>();
+
+    private List<String>             fieldName       = new ArrayList<String>();
+    private List<String>             fieldType       = new ArrayList<String>();
+    private List<String>             fieldLabel      = new ArrayList<String>();
+    private List<String>             jumpLink        = new ArrayList<String>();
+    private List<Boolean>            fieldIsShow     = new ArrayList<Boolean>();
+    private List<String>             fieldQueryType  = new ArrayList<String>();
+
+    private List<String>             btnName         = new ArrayList<String>();
+    private List<String>             btnLabel        = new ArrayList<String>();
+    private List<String>             showCond        = new ArrayList<String>();
+    private List<String>             btnStyle        = new ArrayList<String>();
+    private List<String>             btnEvent        = new ArrayList<String>();
+    private List<String>             btnModel        = new ArrayList<String>();
+    private List<String>             ajaxTip         = new ArrayList<String>();
+    private List<String>             paramValueField = new ArrayList<String>();
+    private List<String>             paramName       = new ArrayList<String>();
+    private List<String>             btnUrl          = new ArrayList<String>();
 
     public String getName() {
         return name;
@@ -211,6 +218,14 @@ public class DynamicModuleDesignBean {
 
     public void setBtnStyle(List<String> btnStyle) {
         this.btnStyle = btnStyle;
+    }
+
+    public Map<String, ModuleField> getSameModuleField() {
+        return sameModuleField;
+    }
+
+    public void setSameModuleField(Map<String, ModuleField> sameModuleField) {
+        this.sameModuleField = sameModuleField;
     }
 
     @Override

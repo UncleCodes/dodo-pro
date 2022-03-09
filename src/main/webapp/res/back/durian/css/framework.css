@@ -261,3 +261,31 @@ select.validateError {
 .dodo_file_pic{
 	width:240px;
 }
+
+/* ---------- Middle ---------- */
+
+.middle .main {
+	width: 6px;
+	height: 100%;
+	cursor: pointer;
+}
+
+.middle .leftArrow {
+	width: 5px;
+	border-right: 1px solid #94b7d3;
+	background: url(../images/middle_bg.gif) #e9f2f8 -6px center no-repeat;
+}
+
+.middle .leftArrow:hover {
+	background-color: #d7e7f6;
+}
+
+.middle .rightArrow {
+	width: 5px;
+	border-right: 1px solid #94b7d3;
+	background: url(../images/middle_bg.gif) #e9f2f8 -18px center no-repeat;
+}
+
+.middle .rightArrow:hover {
+	background-color: #d7e7f6;
+}
