@@ -76,6 +76,12 @@ import com.dodo.common.framework.entity.BaseEntity;
         model = DodoButtonRightModel.ROW,
         event = DodoButtonRightEvent.URL,
         urlTarget = "_blank")
+@DodoButtonRight(
+        name = "处理",
+        path = "/row/deal_busi",
+        model = DodoButtonRightModel.ROW,
+        event = DodoButtonRightEvent.EDIT_PROPERTY,
+        editPropertys = { "field1", "field2" })
 public class ButtonRightDemo extends BaseEntity {
 
     private static final long serialVersionUID = 5475359959248427119L;
