@@ -93,19 +93,26 @@ public class ModuleButton extends BaseEntity {
 
     @DodoField(
             sortSeq = 7,
+            nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.ajaxTipStyle",
+            isnullable = false,
+            maxLength = 16)
+    private String            ajaxTipStyle;
+
+    @DodoField(
+            sortSeq = 8,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramValueField",
             isnullable = false,
             maxLength = 64)
     private String            paramValueField;
 
     @DodoField(
-            sortSeq = 8,
+            sortSeq = 9,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramName",
             isnullable = false,
             maxLength = 64)
     private String            paramName;
 
-    @DodoField(sortSeq = 9, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
+    @DodoField(sortSeq = 10, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
     private String            btnUrl;
 
     @ManyToOne
@@ -207,6 +214,15 @@ public class ModuleButton extends BaseEntity {
 
     public void setBtnStyle(String btnStyle) {
         this.btnStyle = btnStyle;
+    }
+
+    @Column(length = 16)
+    public String getAjaxTipStyle() {
+        return ajaxTipStyle;
+    }
+
+    public void setAjaxTipStyle(String ajaxTipStyle) {
+        this.ajaxTipStyle = ajaxTipStyle;
     }
 
 }

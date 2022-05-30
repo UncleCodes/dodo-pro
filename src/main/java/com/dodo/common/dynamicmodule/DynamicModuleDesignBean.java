@@ -40,6 +40,7 @@ public class DynamicModuleDesignBean {
     private List<String>             btnEvent        = new ArrayList<String>();
     private List<String>             btnModel        = new ArrayList<String>();
     private List<String>             ajaxTip         = new ArrayList<String>();
+    private List<String>             ajaxTipStyle    = new ArrayList<String>();
     private List<String>             paramValueField = new ArrayList<String>();
     private List<String>             paramName       = new ArrayList<String>();
     private List<String>             btnUrl          = new ArrayList<String>();
@@ -228,16 +229,24 @@ public class DynamicModuleDesignBean {
         this.sameModuleField = sameModuleField;
     }
 
+    public List<String> getAjaxTipStyle() {
+        return ajaxTipStyle;
+    }
+
+    public void setAjaxTipStyle(List<String> ajaxTipStyle) {
+        this.ajaxTipStyle = ajaxTipStyle;
+    }
+
     @Override
     public String toString() {
         return "DynamicModuleDesignBean [menuSELECT=" + menuSELECT + ", updateModuleEntityId=" + updateModuleEntityId
                 + ", name=" + name + ", beforeConditionSELECT=" + beforeConditionSELECT + ", afterConditionSELECT="
-                + afterConditionSELECT + ", execSql=" + execSql + ", fieldName=" + fieldName + ", fieldType="
-                + fieldType + ", fieldLabel=" + fieldLabel + ", jumpLink=" + jumpLink + ", fieldIsShow=" + fieldIsShow
-                + ", fieldQueryType=" + fieldQueryType + ", btnName=" + btnName + ", btnLabel=" + btnLabel
-                + ", showCond=" + showCond + ", btnStyle=" + btnStyle + ", btnEvent=" + btnEvent + ", btnModel="
-                + btnModel + ", ajaxTip=" + ajaxTip + ", paramValueField=" + paramValueField + ", paramName="
+                + afterConditionSELECT + ", execSql=" + execSql + ", sameModuleField=" + sameModuleField
+                + ", fieldName=" + fieldName + ", fieldType=" + fieldType + ", fieldLabel=" + fieldLabel
+                + ", jumpLink=" + jumpLink + ", fieldIsShow=" + fieldIsShow + ", fieldQueryType=" + fieldQueryType
+                + ", btnName=" + btnName + ", btnLabel=" + btnLabel + ", showCond=" + showCond + ", btnStyle="
+                + btnStyle + ", btnEvent=" + btnEvent + ", btnModel=" + btnModel + ", ajaxTip=" + ajaxTip
+                + ", ajaxTipStyle=" + ajaxTipStyle + ", paramValueField=" + paramValueField + ", paramName="
                 + paramName + ", btnUrl=" + btnUrl + "]";
     }
-
 }
