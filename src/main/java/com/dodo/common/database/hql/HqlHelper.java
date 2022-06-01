@@ -1275,7 +1275,7 @@ public class HqlHelper {
      * select tableAlias.fieldName as alias <br/>
      * from ...
      */
-    public HqlHelper fetchOther(String tableAlias, String fieldName, String alias) {
+    public HqlHelper fetchWithTable(String tableAlias, String fieldName, String alias) {
         fetchFields.add(new FetchField(tableAlias, fieldName, alias));
         return this;
     }
@@ -1394,7 +1394,7 @@ public class HqlHelper {
      * where ... <br/>
      * group by tableAlias.fieldName
      */
-    public HqlHelper groupByOther(String tableAlias, String fieldName, String alias) {
+    public HqlHelper groupBy(String tableAlias, String fieldName, String alias) {
         groupByPropertys.add(new FetchField(tableAlias, fieldName, alias));
         return this;
     }
@@ -1861,7 +1861,7 @@ public class HqlHelper {
     /**
      * 拼接链式字段，比如：city.province.country.name
      */
-    public static String makeFieldChain(String... fields) {
+    public static String dotFields(String... fields) {
         return String.join(".", fields);
     }
 }

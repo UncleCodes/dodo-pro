@@ -32,7 +32,7 @@ public class HqlHelperTestGroup extends DodoTestBase {
         // 示例一
         // 查询每个省份下的城市数量和最大的区号，返回城市数量 between 2 and 10 的数据
         helper.resetQueryFrom(City.class).join(HqlHelper.currTable, "province", "p")
-                .groupByOther("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 10L)
+                .groupBy("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 10L)
                 .max("areaCode", "maxAreaCode");
         Records provinceCityCount = helperService.getRecordsGroup(helper);
         System.err.println("provinceCityCount1 =" + provinceCityCount);
@@ -44,7 +44,7 @@ public class HqlHelperTestGroup extends DodoTestBase {
         //（3）按照最大区号升序排列
         //（4）读取3条记录
         helper.resetQueryFrom(City.class).join(HqlHelper.currTable, "province", "p").ne("p", "name", "吉林")
-                .groupByOther("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 10L)
+                .groupBy("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 10L)
                 .max("areaCode", "maxAreaCode").having_and().having_like("08", MatchType.START).having_or()
                 .having_like("09", MatchType.START).having_end().having_end().group_orderBy(OrderType.asc)
                 .setFirstResult(0).setMaxResults(3);

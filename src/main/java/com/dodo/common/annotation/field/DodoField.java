@@ -414,4 +414,9 @@ public @interface DodoField {
      * <strong>优先级高于 regExpTip </strong>
      */
     public String regExpTipKey() default "";
+
+    /**
+     * 是否将该字段作为查询条件放在高级查询页面
+     * */
+    public boolean queryOnChart() default true;
 }

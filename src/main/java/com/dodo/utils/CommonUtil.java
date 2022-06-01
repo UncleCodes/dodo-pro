@@ -1011,8 +1011,8 @@ public class CommonUtil {
         String[] queryValues = null;
         String queryValue1 = null;
         String queryValue2 = null;
-        String queryTypeKey = "_field_query_type_" + propertyName;
-        String queryValueKey = "_field_query_value_" + propertyName;
+        String queryTypeKey = "_qt_" + propertyName;
+        String queryValueKey = "_qv_" + propertyName;
         queryType = request.getParameter(queryTypeKey);
         if (StringUtils.isBlank(queryType)) {
             return;
@@ -1059,15 +1059,15 @@ public class CommonUtil {
                     }
                     if (queryIds.length == 1) {
                         if ("eq".equals(queryType)) {
-                            helper.eq(HqlHelper.makeFieldChain(propertyName, "id"), queryIds[0]);
+                            helper.eq(HqlHelper.dotFields(propertyName, "id"), queryIds[0]);
                         } else {
-                            helper.ne(HqlHelper.makeFieldChain(propertyName, "id"), queryIds[0]);
+                            helper.ne(HqlHelper.dotFields(propertyName, "id"), queryIds[0]);
                         }
                     } else {
                         if ("eq".equals(queryType)) {
-                            helper.in(HqlHelper.makeFieldChain(propertyName, "id"), queryIds);
+                            helper.in(HqlHelper.dotFields(propertyName, "id"), queryIds);
                         } else {
-                            helper.notIn(HqlHelper.makeFieldChain(propertyName, "id"), queryIds);
+                            helper.notIn(HqlHelper.dotFields(propertyName, "id"), queryIds);
                         }
                     }
                     if (model != null) {
@@ -1083,8 +1083,8 @@ public class CommonUtil {
                     queryValues = request.getParameterValues(queryValueKey + "[]");
                 }
                 if (queryValues != null && queryValues.length > 0) {
-                    List<Object> queryIds = new ArrayList<Object>(queryValues.length);
-                    StringBuilder _field_query_value_ = new StringBuilder(",");
+                    List<Object> queryIds = new ArrayList<Object>();
+                    StringBuilder _field_query_value_ = new StringBuilder("");
                     for (String queryValue : queryValues) {
                         if (StringUtils.isBlank(queryValue)) {
                             continue;
@@ -1092,6 +1092,10 @@ public class CommonUtil {
                         _field_query_value_.append(queryValue).append(",");
                         queryIds.add(getEnumInterfaceValue((Class<? extends EnumInterface>) fieldType, queryValue));
                     }
+                    if (queryIds.size() == 0) {
+                        return;
+                    }
+                    _field_query_value_.deleteCharAt(_field_query_value_.length() - 1);
                     if (queryIds.size() == 1) {
                         if ("eq".equals(queryType)) {
                             helper.eq(propertyName, queryIds.get(0));

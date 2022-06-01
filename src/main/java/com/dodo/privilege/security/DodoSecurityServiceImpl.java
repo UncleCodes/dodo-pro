@@ -112,10 +112,10 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
         Set<String> haveFieldRights = new HashSet<String>();
 
         HqlHelper helper = HqlHelper.queryFrom(Admin.class);
-        helper.join(HqlHelper.currTable, "roleSet", "r").fetchOther("r", "isSystem", "isSystem")
+        helper.join(HqlHelper.currTable, "roleSet", "r").fetchWithTable("r", "isSystem", "isSystem")
                 .join("r", "allRights", "ri").isNotNull("ri", "menuInfo").isNull("ri", "managerRight")
-                .fetchOther("ri", "rightCode", "rightCode").fetchOther("ri", "id", "rightId")
-                .fetchOther("ri", "rightLink", "rightLink").fetchOther("ri", "isSystem", "isSystemRight")
+                .fetchWithTable("ri", "rightCode", "rightCode").fetchWithTable("ri", "id", "rightId")
+                .fetchWithTable("ri", "rightLink", "rightLink").fetchWithTable("ri", "isSystem", "isSystemRight")
                 .eq("id", localAdmin.getId());
         String rightCode = null;
         String rightLink = null;
@@ -160,7 +160,7 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
         }
 
         helper.resetQueryFrom(Admin.class).join(HqlHelper.currTable, "roleSet", "r").join("r", "allFieldRights", "fri")
-                .fetchOther("fri", "rightCode", "fieldRightCode").fetchOther("fri", "id", "fieldRightId")
+                .fetchWithTable("fri", "rightCode", "fieldRightCode").fetchWithTable("fri", "id", "fieldRightId")
                 .eq("id", localAdmin.getId());
 
         adminPrivs = hqlHelperDao.getRecords(helper, Boolean.TRUE);

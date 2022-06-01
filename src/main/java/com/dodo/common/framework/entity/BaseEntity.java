@@ -39,14 +39,16 @@ public class BaseEntity implements Serializable {
             sortSeq = 3412,
             addable = false,
             editable = false,
-            listable = false)
+            listable = false,
+            queryOnChart = false)
     protected Date            createDate;
     @DodoField(
             nameKey = "dodo.common.bean.namekey.modifyDate",
             sortSeq = 3413,
             addable = false,
             editable = false,
-            listable = false)
+            listable = false,
+            queryOnChart = false)
     protected Date            modifyDate;
 
     @DodoField(
@@ -56,7 +58,8 @@ public class BaseEntity implements Serializable {
             isDigits = true,
             min = Integer.MIN_VALUE + "",
             max = Integer.MAX_VALUE + "",
-            listable = false)
+            listable = false,
+            queryOnChart = false)
     protected Integer         sortSeq;
 
     /** 临时变量 **/

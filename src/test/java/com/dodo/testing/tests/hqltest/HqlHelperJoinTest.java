@@ -32,7 +32,7 @@ public class HqlHelperJoinTest extends DodoTestBase {
     public void innerJoinTest() {
         // 查询ID=1160799039167057920的城市的省份名称
         HqlHelper helper = HqlHelper.queryFrom(City.class);
-        helper.join(HqlHelper.currTable, "province", "p").fetchOther("p", "name", "provinceName")
+        helper.join(HqlHelper.currTable, "province", "p").fetchWithTable("p", "name", "provinceName")
                 .eq("id", "1160799039167057920");
         Record tempRecord = helperService.getRecord(helper);
         System.err.println(tempRecord);
@@ -43,7 +43,7 @@ public class HqlHelperJoinTest extends DodoTestBase {
     public void fullJoinTest() {
         // 查询具有相同名称的省份和城市，取一条记录
         HqlHelper helper = HqlHelper.queryFrom(City.class);
-        helper.join(Province.class, "p").fetchOther("p", "name", "provinceName")
+        helper.join(Province.class, "p").fetchWithTable("p", "name", "provinceName")
                 .eqProperty(HqlHelper.currTable, "name", "p", "name");
         Record tempRecord = helperService.getRecord(helper);
         System.err.println(tempRecord);
@@ -55,8 +55,8 @@ public class HqlHelperJoinTest extends DodoTestBase {
         // 角色右关联查询创建该角色的管理员，返回角色名称和管理员名称
         // 因为'报表+Demo权限，行权限：妹妹'这个管理员没有创建过角色，因为是right join ，所以返回的roleName=null
         HqlHelper helper = HqlHelper.queryFrom(Role.class);
-        helper.fetchOther(HqlHelper.currTable, "name", "roleName").rightJoin(HqlHelper.currTable, "admin", "a")
-                .fetchOther("a", "name", "adminName");
+        helper.fetchWithTable(HqlHelper.currTable, "name", "roleName").rightJoin(HqlHelper.currTable, "admin", "a")
+                .fetchWithTable("a", "name", "adminName");
         Records tempRecords = helperService.getRecords(helper, false);
         System.err.println(tempRecords);
     }
@@ -67,8 +67,8 @@ public class HqlHelperJoinTest extends DodoTestBase {
         // 角色左关联查询创建该角色的管理员，返回角色名称和管理员名称
         // 因为'系统管理员'这个角色没有创建人，因为是left join ，所以返回的adminName=null
         HqlHelper helper = HqlHelper.queryFrom(Role.class);
-        helper.fetchOther(HqlHelper.currTable, "name", "roleName").leftJoin(HqlHelper.currTable, "admin", "a")
-                .fetchOther("a", "name", "adminName");
+        helper.fetchWithTable(HqlHelper.currTable, "name", "roleName").leftJoin(HqlHelper.currTable, "admin", "a")
+                .fetchWithTable("a", "name", "adminName");
         Records tempRecords = helperService.getRecords(helper, false);
         System.err.println(tempRecords);
     }

@@ -1,5 +1,7 @@
 package com.dodo.privilege.action.frame;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import com.dodo.common.framework.service.HqlHelperService;
 import com.dodo.privilege.entity.admin_1.base_1.Admin;
 import com.dodo.privilege.security.DodoSecurityService;
 import com.dodo.utils.JacksonUtil;
+import com.dodo.utils.RespData;
 import com.dodo.utils.SpringUtil;
 import com.dodo.utils.config.DodoFrameworkConfigUtil.DodoCommonConfigUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -62,6 +65,32 @@ public class FrameMenuAction {
         model.addAttribute("userName", admin.getUsername());
         model.addAttribute("realName", admin.getName());
         return "page_changepwd";
+    }
+
+    @RequestMapping("/add_query_plan.jhtml")
+    @ResponseBody
+    public RespData addQueryPlan(Model model, HttpServletRequest request, String entityClassFullName, String planTitle) {
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        dataMap.put("entityClassFullName", entityClassFullName);
+        Enumeration<String> e = request.getParameterNames();
+        if (e.hasMoreElements()) {
+            while (e.hasMoreElements()) {
+                String paramName = e.nextElement();
+                String[] paramValues = request.getParameterValues(paramName);
+                paramName = paramName.replace("[]", "");
+                if (paramValues.length == 1) {
+                    dataMap.put(paramName, paramValues[0]);
+                } else {
+                    List<Object> tempList = new ArrayList<Object>();
+                    for (int i = 0; i < paramValues.length; i++) {
+                        tempList.add(paramValues[i]);
+                    }
+                    dataMap.put(paramName, tempList);
+                }
+            }
+        }
+
+        return RespData.success(dataMap);
     }
 
     @RequestMapping("/changepwd_post.jhtml")

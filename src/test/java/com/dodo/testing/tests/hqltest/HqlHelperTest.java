@@ -31,7 +31,7 @@ public class HqlHelperTest extends DodoTestBase {
         // 一个基本的查询例子 - 查询单个
         // 查询id=1160799039167057920 的城市名称以及归属的省份名称
         HqlHelper helper = HqlHelper.queryFrom(City.class);
-        helper.fetch("name").join(HqlHelper.currTable, "province", "p").fetchOther("p", "name", "provinceName")
+        helper.fetch("name").join(HqlHelper.currTable, "province", "p").fetchWithTable("p", "name", "provinceName")
                 .eq("id", "1160799039167057920");
         Record oneCity = helperService.getRecord(helper);
         System.err.println("oneCity=" + oneCity);
@@ -39,14 +39,14 @@ public class HqlHelperTest extends DodoTestBase {
         // 一个基本的查询例子 - 查询列表
         // 查询所有城市名称以及归属的省份名称，返回2条记录
         helper.resetQueryFrom(City.class).fetch("name").join(HqlHelper.currTable, "province", "p")
-                .fetchOther("p", "name", "provinceName").setFirstResult(0).setMaxResults(2);
+                .fetchWithTable("p", "name", "provinceName").setFirstResult(0).setMaxResults(2);
         Records cityList = helperService.getRecords(helper, false);
         System.err.println("cityList=" + cityList);
 
         //        // 一个基本的查询例子 - 查询列表
         //        // 查询所有城市名称以及归属的省份名称，返回2条记录
         //        helper.resetQueryFrom(City.class).fetch(CityFields.name).join(HqlHelper.currTable, CityFields.province, "p")
-        //                .fetchOther("p", ProvinceFields.name, "provinceName").setFirstResult(0).setMaxResults(2);
+        //                .fetchWithTable("p", ProvinceFields.name, "provinceName").setFirstResult(0).setMaxResults(2);
         //        Records cityList = helperService.getRecords(helper, false);
         //        System.err.println("cityList=" + cityList);
 
@@ -67,7 +67,7 @@ public class HqlHelperTest extends DodoTestBase {
         // 一个基本的分组查询例子
         // 查询每个省份下的城市数量和最大的区号，返回城市数量 between 2 and 5 的数据
         helper.resetQueryFrom(City.class).join(HqlHelper.currTable, "province", "p")
-                .groupByOther("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 5L)
+                .groupBy("p", "name", "provinceName").count("id", "cityCount").having_between(2L, 5L)
                 .max("areaCode", "maxAreaCode");
         Records provinceCityCount = helperService.getRecordsGroup(helper);
         System.err.println("provinceCityCount =" + provinceCityCount);
