@@ -1,6 +1,8 @@
 package com.dodo.privilege.action.frame;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +23,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dodo.common.captcha.octo.CaptchaUtil;
+import com.dodo.common.database.data.Record;
+import com.dodo.common.database.data.Records;
 import com.dodo.common.database.hql.HqlHelper;
+import com.dodo.common.framework.bean.pager.PageModel.OrderType;
 import com.dodo.common.framework.bean.tree.DodoTree;
 import com.dodo.common.framework.bean.tree.DodoTreeNode;
 import com.dodo.common.framework.service.HqlHelperService;
 import com.dodo.privilege.entity.admin_1.base_1.Admin;
+import com.dodo.privilege.entity.admin_1.config_5.Entity;
+import com.dodo.privilege.entity.admin_1.data_4.AdvancedQueryPlan;
 import com.dodo.privilege.security.DodoSecurityService;
+import com.dodo.utils.CommonUtil;
 import com.dodo.utils.JacksonUtil;
 import com.dodo.utils.RespData;
 import com.dodo.utils.SpringUtil;
@@ -49,7 +57,7 @@ public class FrameMenuAction {
     private DodoSecurityService securityService;
 
     @Autowired
-    private HqlHelperService    hqlHelperService;
+    private HqlHelperService    helperService;
 
     private final String        CHANGE_PWD_SALT_IN_SESSION = "CHANGE_PWD_SALT_IN_SESSION";
 
@@ -71,7 +79,6 @@ public class FrameMenuAction {
     @ResponseBody
     public RespData addQueryPlan(Model model, HttpServletRequest request, String entityClassFullName, String planTitle) {
         Map<String, Object> dataMap = new HashMap<String, Object>();
-        dataMap.put("entityClassFullName", entityClassFullName);
         Enumeration<String> e = request.getParameterNames();
         if (e.hasMoreElements()) {
             while (e.hasMoreElements()) {
@@ -90,7 +97,96 @@ public class FrameMenuAction {
             }
         }
 
-        return RespData.success(dataMap);
+        String queryPlanName = SpringUtil.getMessageBack("dodo.privilege.admin.data.AdvancedQueryPlan.entityKey",
+                new Object[0], request);
+
+        // addBy
+        Admin admin = (Admin) securityService.getLoginPrincipal();
+
+        // entity
+        HqlHelper queryEntityHelper = HqlHelper.queryFrom(Entity.class);
+        queryEntityHelper.eq("className", entityClassFullName);
+        Entity entity = helperService.getEntity(queryEntityHelper);
+
+        // planDetail
+        String planDetail = "";
+        try {
+            planDetail = JacksonUtil.toJackson(dataMap, Boolean.TRUE);
+        } catch (JsonProcessingException e1) {
+            e1.printStackTrace();
+        }
+
+        if (StringUtils.isBlank(planDetail)) {
+            return RespData.fail(SpringUtil.getMessageBack("dodo.infotip.add.fail", new Object[] { queryPlanName },
+                    request));
+        }
+
+        // Save
+        AdvancedQueryPlan plan = new AdvancedQueryPlan();
+        plan.setAddBy(admin);
+        plan.setEntity(entity);
+        plan.setPlanDetail(planDetail);
+        plan.setPlanTitle(CommonUtil.escapeHtml(planTitle));
+        helperService.save(plan);
+
+        return RespData.success(
+                SpringUtil.getMessageBack("dodo.infotip.add.success", new Object[] { queryPlanName }, request), null);
+    }
+
+    @RequestMapping("/delete_query_plan.jhtml")
+    @ResponseBody
+    public RespData deleteQueryPlan(Model model, HttpServletRequest request, String queryPlanId) {
+        HqlHelper helper = HqlHelper.queryFrom(AdvancedQueryPlan.class);
+        helper.eq("id", queryPlanId);
+        helperService.delete(helper);
+
+        String queryPlanName = SpringUtil.getMessageBack("dodo.privilege.admin.data.AdvancedQueryPlan.entityKey",
+                new Object[0], request);
+
+        return RespData
+                .success(SpringUtil.getMessageBack("dodo.infotip.delete.success", new Object[] { queryPlanName },
+                        request), null);
+    }
+
+    @RequestMapping("/get_all_query_plan.jhtml")
+    @ResponseBody
+    public Map<String, Object> getAllQueryPlan(Model model, HttpServletRequest request, String entityClassFullName) {
+        HqlHelper helper = HqlHelper.queryFrom(AdvancedQueryPlan.class).join(HqlHelper.currTable, "entity", "e");
+        helper.eq("e", "className", entityClassFullName).orderBy("createDate", OrderType.desc);
+        helper.fetchWithTable(HqlHelper.currTable, "id", "dodo_id");
+        helper.fetchWithTable(HqlHelper.currTable, "planTitle", "planTitle");
+        helper.fetchWithTable(HqlHelper.currTable, "createDate", "createDate");
+        Records records = helperService.getRecords(helper, Boolean.FALSE);
+        for (Map<String, Object> map : records.getRawData()) {
+            map.put("createDate", CommonUtil.getSpecialDateStr((Date) map.get("createDate"), "yyyy-MM-dd HH:mm:ss"));
+        }
+
+        Map<String, Object> dataMap = new HashMap<String, Object>();
+        dataMap.put("code", 0);
+        dataMap.put("msg", "");
+        dataMap.put("count", records.size());
+        dataMap.put("data", records.getRawData());
+        return dataMap;
+    }
+
+    @RequestMapping("/get_query_plan.jhtml")
+    @ResponseBody
+    public RespData getQueryPlan(Model model, HttpServletRequest request, String entityClassFullName, String queryPlanId) {
+        HqlHelper helper = HqlHelper.queryFrom(AdvancedQueryPlan.class);
+        helper.fetch("planDetail").eq("id", queryPlanId).orderBy("createDate", OrderType.desc);
+        Record record = helperService.getRecord(helper);
+        String planDetail = record.get("planDetail");
+        Map jsonMap = null;
+        try {
+            jsonMap = JacksonUtil.toObject(planDetail, Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (jsonMap == null) {
+            return RespData.fail("Read From Json Fail.");
+        }
+
+        return RespData.success(jsonMap);
     }
 
     @RequestMapping("/changepwd_post.jhtml")
@@ -133,7 +229,7 @@ public class FrameMenuAction {
         helper.update("adminPassword", DigestUtils.md5Hex(newPassword + DodoCommonConfigUtil.passwordSalt));
         helper.eq("id", admin.getId());
 
-        hqlHelperService.update(helper);
+        helperService.update(helper);
 
         retMap.put("status", "success");
         retMap.put("message", SpringUtil.getMessageBack("dodo.infotip.update.success",

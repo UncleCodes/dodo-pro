@@ -109,4 +109,9 @@ public class ButtonRightDemo extends BaseEntity {
     public void setField2(String field2) {
         this.field2 = field2;
     }
+
+    @Override
+    public String entitySummary() {
+        return field1 + " " + field2;
+    }
 }

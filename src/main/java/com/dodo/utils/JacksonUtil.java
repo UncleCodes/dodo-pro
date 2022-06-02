@@ -24,8 +24,19 @@ public class JacksonUtil {
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     // Java对象转Json
+    public static String toJackson(Object object, boolean isPretty) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        if (isPretty) {
+            return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } else {
+            return OBJECT_MAPPER.writeValueAsString(object);
+        }
+    }
+
     public static String toJackson(Object object) throws JsonProcessingException {
-        return object == null ? null : OBJECT_MAPPER.writeValueAsString(object);
+        return toJackson(object, Boolean.FALSE);
     }
 
     // Json转Java对象
