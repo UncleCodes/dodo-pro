@@ -1084,7 +1084,7 @@ public class CommonUtil {
                 }
                 if (queryValues != null && queryValues.length > 0) {
                     List<Object> queryIds = new ArrayList<Object>();
-                    StringBuilder _field_query_value_ = new StringBuilder("");
+                    StringBuilder _field_query_value_ = new StringBuilder(",");
                     for (String queryValue : queryValues) {
                         if (StringUtils.isBlank(queryValue)) {
                             continue;
@@ -1095,7 +1095,6 @@ public class CommonUtil {
                     if (queryIds.size() == 0) {
                         return;
                     }
-                    _field_query_value_.deleteCharAt(_field_query_value_.length() - 1);
                     if (queryIds.size() == 1) {
                         if ("eq".equals(queryType)) {
                             helper.eq(propertyName, queryIds.get(0));

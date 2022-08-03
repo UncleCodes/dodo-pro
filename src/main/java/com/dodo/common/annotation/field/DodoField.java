@@ -106,6 +106,14 @@ public @interface DodoField {
     public boolean isShowWholeTree() default false;
 
     /**
+     * 当字段引用了树状结构的实体时，且isPopup=false时启用<br/>
+     * 1、配置该属性为<code>true</code>表示使用TreeSelect下拉选择<br/>
+     * 2、配置该属性为<code>false</code>表示使用默认下拉选择<br/>
+     * 
+     * */
+    public boolean isTreeSelect() default true;
+
+    /**
      * 表示字段的最大值 只对数字类型 byte short int long float double 以及对应的包装类和BigDecimal有效<br/>
      * 配置该属性时，您需要保证属性值可以被正确地转换为数字
      * */

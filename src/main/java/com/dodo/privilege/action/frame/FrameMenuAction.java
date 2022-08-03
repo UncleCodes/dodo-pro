@@ -86,19 +86,30 @@ public class FrameMenuAction {
                 String[] paramValues = request.getParameterValues(paramName);
                 paramName = paramName.replace("[]", "");
                 if (paramValues.length == 1) {
-                    dataMap.put(paramName, paramValues[0]);
+                    if (StringUtils.isNotBlank(paramValues[0])) {
+                        dataMap.put(paramName, paramValues[0]);
+                    }
                 } else {
                     List<Object> tempList = new ArrayList<Object>();
                     for (int i = 0; i < paramValues.length; i++) {
-                        tempList.add(paramValues[i]);
+                        if (StringUtils.isNotBlank(paramValues[i])) {
+                            tempList.add(paramValues[i]);
+                        }
                     }
-                    dataMap.put(paramName, tempList);
+                    if (tempList.size() > 0) {
+                        dataMap.put(paramName, tempList);
+                    }
                 }
             }
         }
 
         String queryPlanName = SpringUtil.getMessageBack("dodo.privilege.admin.data.AdvancedQueryPlan.entityKey",
                 new Object[0], request);
+
+        if (dataMap.size() == 0) {
+            return RespData.fail(SpringUtil.getMessageBack("dodo.infotip.add.fail", new Object[] { queryPlanName },
+                    request));
+        }
 
         // addBy
         Admin admin = (Admin) securityService.getLoginPrincipal();

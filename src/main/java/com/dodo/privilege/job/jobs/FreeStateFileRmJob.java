@@ -78,7 +78,7 @@ public class FreeStateFileRmJob implements Job {
                     else if (!fileStr.startsWith("http")) {
                         tempFile = new File(FileUtils.getUploadTargetRootDir(), fileStr);
                     } else {
-                        if (OSSService.delete(ossBucket, fileStr)) {
+                        if (OSSService.delete(fileStr, ossBucket)) {
                             freeStateFilesIds.add(record.get("id"));
                         }
                     }
