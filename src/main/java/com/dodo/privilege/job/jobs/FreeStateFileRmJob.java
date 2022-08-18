@@ -48,7 +48,6 @@ public class FreeStateFileRmJob implements Job {
         List<Object> freeStateFilesIds = new ArrayList<Object>(freeStateFiles.size());
         DodoFile[] dodoFiles = null;
         DodoVideoFile[] videoFiles = null;
-        File tempFile = null;
         String fileStr = null;
         String videoFileStr = null;
         String ossBucket = null;
@@ -57,7 +56,7 @@ public class FreeStateFileRmJob implements Job {
         while (ite.hasNext()) {
             record = ite.next();
             try {
-                tempFile = null;
+                List<File> tempFiles = new ArrayList<File>();
                 fileStr = record.get("fileStr");
                 videoFileStr = record.get("videoFileStr");
                 ossBucket = record.get("ossBucket");
@@ -71,15 +70,19 @@ public class FreeStateFileRmJob implements Job {
                     if (fileStr.startsWith("[")) {
                         dodoFiles = JacksonUtil.toObject(fileStr, DodoFile[].class);
                         if (dodoFiles != null && dodoFiles.length > 0) {
-                            tempFile = new File(FileUtils.getUploadTargetRootDir(), dodoFiles[0].getFilePath());
+                            tempFiles.add(new File(FileUtils.getUploadTargetRootDir(), dodoFiles[0].getFilePath()));
                         }
                     }
                     // only path
                     else if (!fileStr.startsWith("http")) {
-                        tempFile = new File(FileUtils.getUploadTargetRootDir(), fileStr);
+                        String[] fileArr = fileStr.split(";");
+                        for (String filePath : fileArr) {
+                            tempFiles.add(new File(FileUtils.getUploadTargetRootDir(), filePath));
+                        }
                     } else {
-                        if (OSSService.delete(fileStr, ossBucket)) {
-                            freeStateFilesIds.add(record.get("id"));
+                        String[] fileArr = fileStr.split(";");
+                        for (String filePath : fileArr) {
+                            OSSService.delete(filePath, ossBucket);
                         }
                     }
                 }
@@ -87,11 +90,11 @@ public class FreeStateFileRmJob implements Job {
                 else if (StringUtils.isNotBlank(videoFileStr)) {
                     videoFiles = JacksonUtil.toObject(videoFileStr, DodoVideoFile[].class);
                     if (videoFiles != null && videoFiles.length > 0) {
-                        tempFile = new File(FileUtils.getUploadTargetRootDir(), videoFiles[0].getFilePath());
+                        tempFiles.add(new File(FileUtils.getUploadTargetRootDir(), videoFiles[0].getFilePath()));
                     }
                 }
 
-                if (tempFile != null) {
+                for (File tempFile : tempFiles) {
                     if (tempFile.getParentFile().getName().startsWith("dododoc")) {
                         org.apache.commons.io.FileUtils.deleteDirectory(tempFile.getParentFile());
                     } else {
