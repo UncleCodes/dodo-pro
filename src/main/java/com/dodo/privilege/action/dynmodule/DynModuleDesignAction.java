@@ -38,6 +38,7 @@ import com.dodo.common.framework.service.DynamicModuleService;
 import com.dodo.common.framework.service.HqlHelperService;
 import com.dodo.common.framework.service.JdbcService;
 import com.dodo.common.sqlreport.SqlReportLimit;
+import com.dodo.privilege.entity.admin_1.config_5.FormModel;
 import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleEntity;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleField;
@@ -275,6 +276,24 @@ public class DynModuleDesignAction {
         returnMap.put("isSuccess", Boolean.FALSE);
         returnMap.put("message", SpringUtil.getMessageBack("dodo.dynmodule.design.submit.fail", request));
         try {
+            HqlHelper helper = HqlHelper.queryFrom(FormModel.class).fetch("id");
+            for (String formModelId : designBean.getFormModel()) {
+                if (StringUtils.isBlank(formModelId)) {
+                    continue;
+                }
+                helper.resetQueryParameters().eq("id", formModelId);
+                if (hqlHelperService.getRecord(helper) == null) {
+                    String formModelEntityName = SpringUtil.getMessageBack(
+                            "dodo.privilege.admin.config.FormModel.entityKey", request);
+                    returnMap.put("isSuccess", Boolean.FALSE);
+                    returnMap.put(
+                            "message",
+                            SpringUtil.getMessageBack("dodo.infotip.entity.notfound", new Object[] { formModelId,
+                                    formModelEntityName }, request));
+                    return returnMap;
+                }
+            }
+
             dynamicModuleService.saveOrUpdateDesign(designBean, request);
             dodoSecurityService.refreshCurrLoginAdmin();
             returnMap.put("isSuccess", Boolean.TRUE);

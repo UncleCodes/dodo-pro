@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.DynamicInsert;
 
@@ -13,6 +14,7 @@ import com.dodo.common.annotation.field.DodoField;
 import com.dodo.common.annotation.field.DodoShowColumn;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.framework.entity.BaseEntity;
+import com.dodo.privilege.entity.admin_1.config_5.FormModel;
 import com.dodo.privilege.enums.ModuleButtonEvent;
 import com.dodo.privilege.enums.ModuleButtonModel;
 
@@ -98,21 +100,24 @@ public class ModuleButton extends BaseEntity {
             maxLength = 16)
     private String            ajaxTipStyle;
 
+    @DodoField(sortSeq = 8, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.formModel")
+    private FormModel         formModel;
+
     @DodoField(
-            sortSeq = 8,
+            sortSeq = 9,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramValueField",
             isnullable = false,
             maxLength = 64)
     private String            paramValueField;
 
     @DodoField(
-            sortSeq = 9,
+            sortSeq = 10,
             nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.paramName",
             isnullable = false,
             maxLength = 64)
     private String            paramName;
 
-    @DodoField(sortSeq = 10, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
+    @DodoField(sortSeq = 11, nameKey = "dodo.privilege.dynmodule.config.ModuleButton.namekey.btnUrl", editable = false)
     private String            btnUrl;
 
     @ManyToOne
@@ -223,6 +228,15 @@ public class ModuleButton extends BaseEntity {
 
     public void setAjaxTipStyle(String ajaxTipStyle) {
         this.ajaxTipStyle = ajaxTipStyle;
+    }
+
+    @OneToOne
+    public FormModel getFormModel() {
+        return formModel;
+    }
+
+    public void setFormModel(FormModel formModel) {
+        this.formModel = formModel;
     }
 
 }

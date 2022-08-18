@@ -41,6 +41,7 @@ public class DynamicModuleDesignBean {
     private List<String>             btnModel        = new ArrayList<String>();
     private List<String>             ajaxTip         = new ArrayList<String>();
     private List<String>             ajaxTipStyle    = new ArrayList<String>();
+    private List<String>             formModel       = new ArrayList<String>();
     private List<String>             paramValueField = new ArrayList<String>();
     private List<String>             paramName       = new ArrayList<String>();
     private List<String>             btnUrl          = new ArrayList<String>();
@@ -237,6 +238,14 @@ public class DynamicModuleDesignBean {
         this.ajaxTipStyle = ajaxTipStyle;
     }
 
+    public List<String> getFormModel() {
+        return formModel;
+    }
+
+    public void setFormModel(List<String> formModel) {
+        this.formModel = formModel;
+    }
+
     @Override
     public String toString() {
         return "DynamicModuleDesignBean [menuSELECT=" + menuSELECT + ", updateModuleEntityId=" + updateModuleEntityId
@@ -246,7 +255,7 @@ public class DynamicModuleDesignBean {
                 + ", jumpLink=" + jumpLink + ", fieldIsShow=" + fieldIsShow + ", fieldQueryType=" + fieldQueryType
                 + ", btnName=" + btnName + ", btnLabel=" + btnLabel + ", showCond=" + showCond + ", btnStyle="
                 + btnStyle + ", btnEvent=" + btnEvent + ", btnModel=" + btnModel + ", ajaxTip=" + ajaxTip
-                + ", ajaxTipStyle=" + ajaxTipStyle + ", paramValueField=" + paramValueField + ", paramName="
-                + paramName + ", btnUrl=" + btnUrl + "]";
+                + ", ajaxTipStyle=" + ajaxTipStyle + ", formModel=" + formModel + ", paramValueField="
+                + paramValueField + ", paramName=" + paramName + ", btnUrl=" + btnUrl + "]";
     }
 }

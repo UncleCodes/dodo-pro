@@ -206,6 +206,24 @@ public class OSSService implements Destroyable {
         return normalUrl + "?Exception=Occ";
     }
 
+    /**
+     * 私有库生成临时URL 使用分号隔开
+     * **/
+    public static String generatePresignedUrlFromUrlList(String bucket, String normalUrlStr) {
+        if (StringUtils.isBlank(normalUrlStr)) {
+            return "";
+        }
+        String[] normalUrlArr = normalUrlStr.split(";");
+        StringBuilder sbBuilder = new StringBuilder();
+        for (String normalUrl : normalUrlArr) {
+            sbBuilder.append(generatePresignedUrlFromUrl(bucket, normalUrl)).append(";");
+        }
+        if (sbBuilder.length() > 0) {
+            sbBuilder.deleteCharAt(sbBuilder.length() - 1);
+        }
+        return sbBuilder.toString();
+    }
+
     public static String upload(File file, String ossKey, String bucketName) {
         OSSBucket bucket = buckets.get(bucketName);
         if (bucket == null) {

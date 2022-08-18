@@ -14,6 +14,7 @@ import com.dodo.common.database.hql.HqlHelper.MatchType;
 import com.dodo.common.dynamicmodule.DynamicModuleDesignBean;
 import com.dodo.common.framework.dao.HqlHelperDao;
 import com.dodo.common.framework.service.DynamicModuleService;
+import com.dodo.privilege.entity.admin_1.config_5.FormModel;
 import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
 import com.dodo.privilege.entity.admin_1.config_5.Right;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleButton;
@@ -158,6 +159,9 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             moduleButton.setAjaxTipStyle(CommonUtil.escapeHtml(designBean.getAjaxTipStyle().get(i)));
             moduleButton.setParamValueField(CommonUtil.escapeHtml(designBean.getParamValueField().get(i)));
             moduleButton.setParamName(CommonUtil.escapeHtml(designBean.getParamName().get(i)));
+            if (StringUtils.isNotBlank(designBean.getFormModel().get(i))) {
+                moduleButton.setFormModel(helperDao.load(designBean.getFormModel().get(i), FormModel.class));
+            }
             moduleButton.setSortSeq(i);
             btnUrl = designBean.getBtnUrl().get(i).trim();
             moduleButton.setBtnUrl(btnUrl);

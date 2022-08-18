@@ -788,8 +788,7 @@ public class CommonUtil {
             if (fieldType == ExtendModelFieldType.SINGLEFILE || fieldType == ExtendModelFieldType.MULTIFILE
                     || fieldType == ExtendModelFieldType.DOC) {
                 fileList = new LinkedList<DodoFile>();
-                if (fieldType == ExtendModelFieldType.SINGLEFILE && fileStyle == FileStyle.OnlyPath
-                        && StringUtils.isNotBlank(ossBucket)) {
+                if (fileStyle == FileStyle.OnlyPath && StringUtils.isNotBlank(ossBucket)) {
                     uploadFileReturn = FileUtils
                             .getUploadFiles("uploader-" + currRequestFieldName, fileList, request, (StringUtils
                                     .isBlank(fileExts) && fieldType == ExtendModelFieldType.DOC) ? DodoOfficeConverter
@@ -818,8 +817,13 @@ public class CommonUtil {
                     return resultMap;
                 }
                 if (fileList.size() > 0) {
-                    if (fieldType == ExtendModelFieldType.SINGLEFILE && fileStyle == FileStyle.OnlyPath) {
-                        extendInfos.put(extFieldName, fileList.get(0).getHttpPath());
+                    if (fileStyle == FileStyle.OnlyPath) {
+                        StringBuilder fileBuilder = new StringBuilder();
+                        for (DodoFile tempFile : fileList) {
+                            fileBuilder.append(tempFile.getHttpPath()).append(";");
+                        }
+                        fileBuilder.deleteCharAt(fileBuilder.length() - 1);
+                        extendInfos.put(extFieldName, fileBuilder.toString());
                     } else {
                         extendInfos.put(extFieldName, JacksonUtil.toJackson(fileList));
                     }

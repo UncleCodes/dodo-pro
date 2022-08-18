@@ -27,78 +27,73 @@ import com.dodo.privilege.enums.ExtendModelFieldType;
 @javax.persistence.Entity
 @DynamicInsert
 @DodoEntity(
-        nameKey = "dodo.privilege.admin.config.ExtendModel.entityKey",
+        nameKey = "dodo.privilege.admin.config.FormModelField.entityKey",
         actions = { DodoAction.ALL },
         levelOne = @DodoMenu(nameKey = "dodo.privilege.admin.menuNameKey", sortSeq = 1),
         levelTwo = @DodoMenu(nameKey = "dodo.privilege.admin.config.menuNameKey", sortSeq = 5),
-        levelThree = @DodoMenu(nameKey = "dodo.privilege.admin.config.ExtendModel.menuNameKey", sortSeq = 6))
-@DodoUniqueGroup(fieldNames = { "entity", "extFieldName" })
-public class ExtendModel extends BaseEntity implements java.io.Serializable {
-    private static final long    serialVersionUID = 2740252352760524146L;
+        levelThree = @DodoMenu(nameKey = "dodo.privilege.admin.config.FormModelField.menuNameKey", sortSeq = 8))
+@DodoUniqueGroup(fieldNames = { "formModel", "fieldName" })
+public class FormModelField extends BaseEntity implements java.io.Serializable {
+
+    private static final long    serialVersionUID = 8005953822890520170L;
 
     @DodoField(
             sortSeq = 1,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.entity",
-            queryParams = "eq(\"isModelExtend\",Boolean.TRUE)",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.formModel",
+            queryParams = "eq(\"isUse\",Boolean.TRUE)",
             isnullable = false,
             editable = false,
             queryOnList = true,
             isSetDefault = false)
-    private Entity               entity;
+    private FormModel            formModel;
 
     @DodoField(
             sortSeq = 2,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.extFieldName",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.fieldName",
             isnullable = false,
             editable = false,
             queryOnList = true,
             isSetDefault = false,
             regExp = "[a-zA-Z]{3,}",
             regExpTip = "Only:[a-zA-Z]{3,}")
-    private String               extFieldName;
+    private String               fieldName;
 
     @DodoField(
             sortSeq = 3,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.fieldType",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.fieldType",
             isnullable = false,
             editable = false)
     private ExtendModelFieldType fieldType;
 
-    @DodoField(sortSeq = 4, nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.extShowName", queryOnList = true)
-    private String               extShowName;
+    @DodoField(sortSeq = 4, nameKey = "dodo.privilege.admin.config.FormModelField.namekey.showName", queryOnList = true)
+    private String               showName;
 
     @DodoField(
             sortSeq = 5,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.extShowNameKey",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.extShowNameKey")
-    private String               extShowNameKey;
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.showNameKey",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.showNameKey")
+    private String               showNameKey;
 
-    @DodoField(sortSeq = 6, nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.addable", isnullable = false)
-    private Boolean              addable;
-
-    @DodoField(sortSeq = 7, nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.editable", isnullable = false)
-    private Boolean              editable;
-
-    @DodoField(sortSeq = 8, nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.nullable", isnullable = false)
+    @DodoField(sortSeq = 8, nameKey = "dodo.privilege.admin.config.FormModelField.namekey.nullable", isnullable = false)
     private Boolean              nullable;
 
     @DodoField(
             sortSeq = 9,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.minLength",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.minLength",
             showOnField = "fieldType",
             showOnValue = "STRING,TEXTAREA")
     private Integer              minLength;
 
     @DodoField(
             sortSeq = 10,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.maxLength",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.maxLength",
             showOnField = "fieldType",
             showOnValue = "STRING,TEXTAREA")
     private Integer              maxLength;
 
     @DodoField(
             sortSeq = 11,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.isEmail",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.isEmail",
             showOnField = "fieldType",
             showOnValue = "STRING",
             isnullable = false)
@@ -106,7 +101,7 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
 
     @DodoField(
             sortSeq = 12,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.isMobile",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.isMobile",
             showOnField = "fieldType",
             showOnValue = "STRING",
             isnullable = false)
@@ -114,7 +109,7 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
 
     @DodoField(
             sortSeq = 13,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.isUrl",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.isUrl",
             showOnField = "fieldType",
             showOnValue = "STRING",
             isnullable = false)
@@ -122,7 +117,7 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
 
     @DodoField(
             sortSeq = 14,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.isCreditcard",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.isCreditcard",
             showOnField = "fieldType",
             showOnValue = "STRING",
             isnullable = false)
@@ -130,7 +125,7 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
 
     @DodoField(
             sortSeq = 15,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.isIp",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.isIp",
             showOnField = "fieldType",
             showOnValue = "STRING",
             isnullable = false)
@@ -138,74 +133,74 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
 
     @DodoField(
             sortSeq = 16,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.minValue",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.minValue",
             showOnField = "fieldType",
             showOnValue = "NUMBER,DIGITS")
     private Integer              minValue;
 
     @DodoField(
             sortSeq = 17,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.maxValue",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.maxValue",
             showOnField = "fieldType",
             showOnValue = "NUMBER,DIGITS")
     private Integer              maxValue;
 
-    @DodoField(sortSeq = 18, nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.infoTip")
+    @DodoField(sortSeq = 18, nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTip")
     private String               infoTip;
 
     @DodoField(
             sortSeq = 19,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.infoTipKey",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.infoTipKey")
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTipKey",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.infoTipKey")
     private String               infoTipKey;
 
     @DodoField(
             sortSeq = 20,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.maxFileSize",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.maxFileSize",
             showOnField = "fieldType",
             showOnValue = "SINGLEFILE,MULTIFILE,DOC,VIDEO",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.maxFileSize",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.maxFileSize",
             isnullable = false)
     private Integer              maxFileSize;
 
     @DodoField(
             sortSeq = 21,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.fileExts",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.fileExts",
             showOnField = "fieldType",
             showOnValue = "SINGLEFILE,MULTIFILE,DOC,VIDEO",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.fileExts",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.fileExts",
             isnullable = false)
     private String               fileExts;
 
     @DodoField(
             sortSeq = 22,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.valueList",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.valueList",
             showOnField = "fieldType",
             showOnValue = "SELECT,RADIO,CHECKBOX",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.valueList",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.valueList",
             isnullable = false)
     private String               valueList;
 
     @DodoField(
             sortSeq = 23,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.labelList",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.labelList",
             showOnField = "fieldType",
             showOnValue = "SELECT,RADIO,CHECKBOX",
-            infoTipKey = "dodo.privilege.admin.config.ExtendModel.infoTip.labelList",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.labelList",
             isnullable = false)
     private String               labelList;
 
     @DodoField(
             sortSeq = 24,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.fileStyle",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.fileStyle",
             showOnField = "fieldType",
-            showOnValue = "SINGLEFILE,MULTIFILE",
+            showOnValue = "SINGLEFILE",
             isnullable = false)
     private FileStyle            fileStyle;
 
     @DodoField(
             sortSeq = 25,
-            nameKey = "dodo.privilege.admin.config.ExtendModel.namekey.ossBucket",
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.ossBucket",
             showOnField = "fileStyle",
             showOnValue = "OnlyPath")
     private String               ossBucket;
@@ -227,13 +222,13 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
     }
 
     @OneToOne
-    public Entity getEntity() {
-        return entity;
+    public FormModel getFormModel() {
+        return formModel;
     }
 
     @Column(length = 64)
-    public String getExtFieldName() {
-        return extFieldName;
+    public String getFieldName() {
+        return fieldName;
     }
 
     @Column(length = 3)
@@ -243,21 +238,13 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
     }
 
     @Column(length = 64)
-    public String getExtShowName() {
-        return extShowName;
+    public String getShowName() {
+        return showName;
     }
 
     @Column(length = 128)
-    public String getExtShowNameKey() {
-        return extShowNameKey;
-    }
-
-    public Boolean getAddable() {
-        return addable;
-    }
-
-    public Boolean getEditable() {
-        return editable;
+    public String getShowNameKey() {
+        return showNameKey;
     }
 
     public Boolean getNullable() {
@@ -319,32 +306,24 @@ public class ExtendModel extends BaseEntity implements java.io.Serializable {
         return fileExts;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setFormModel(FormModel formModel) {
+        this.formModel = formModel;
     }
 
-    public void setExtFieldName(String extFieldName) {
-        this.extFieldName = extFieldName;
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public void setFieldType(ExtendModelFieldType fieldType) {
         this.fieldType = fieldType;
     }
 
-    public void setExtShowName(String extShowName) {
-        this.extShowName = extShowName;
+    public void setShowName(String showName) {
+        this.showName = showName;
     }
 
-    public void setExtShowNameKey(String extShowNameKey) {
-        this.extShowNameKey = extShowNameKey;
-    }
-
-    public void setAddable(Boolean addable) {
-        this.addable = addable;
-    }
-
-    public void setEditable(Boolean editable) {
-        this.editable = editable;
+    public void setShowNameKey(String showNameKey) {
+        this.showNameKey = showNameKey;
     }
 
     public void setNullable(Boolean nullable) {

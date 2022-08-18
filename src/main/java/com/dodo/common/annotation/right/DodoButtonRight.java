@@ -92,4 +92,9 @@ public @interface DodoButtonRight {
     public int sortSeq() default 0;
 
     public String urlTarget() default "_self";
+
+    /**
+     * 显示条件 支持JS语法， 使用d代表行数据 行模式下启用
+     * */
+    public String displayCondition() default "";
 }
