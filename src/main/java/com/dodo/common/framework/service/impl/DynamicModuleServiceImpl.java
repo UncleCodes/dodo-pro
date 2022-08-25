@@ -219,6 +219,7 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             moduleField.setIsShow(designBean.getFieldIsShow().get(i));
             moduleField.setValueList(StringUtils.isBlank(designBean.getValueList().get(i)) ? "" : designBean
                     .getValueList().get(i));
+            moduleField.setValueIndex(CommonUtil.escapeHtml(designBean.getValueIndex().get(i)));
             moduleField.setSortSeq(i);
 
             jumpLink = designBean.getJumpLink().get(i);

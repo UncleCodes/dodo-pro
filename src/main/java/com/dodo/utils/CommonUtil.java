@@ -93,6 +93,7 @@ public class CommonUtil {
         if (StringUtils.isBlank(string)) {
             return "";
         }
+        string = string.trim();
         StringBuffer sb = new StringBuffer();
         for (int i = 0, len = string.length(); i < len; i++) {
             char c = string.charAt(i);

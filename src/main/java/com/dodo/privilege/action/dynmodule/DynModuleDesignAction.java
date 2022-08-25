@@ -6,9 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -61,7 +63,9 @@ import com.dodo.utils.config.DodoFrameworkConfigUtil;
 @RequestMapping("${dodo.backmanage.view.rootPath}/dynamicmodule")
 public class DynModuleDesignAction {
 
-    private Pattern              pattern = Pattern.compile("(\\d+)");
+    private static Pattern       patternNumber     = Pattern.compile("(\\d+)");
+
+    private static Pattern       patternValueIndex = Pattern.compile("[a-z_A-Z\\d]{3,}");
 
     @Autowired
     private JdbcService          jdbcService;
@@ -88,7 +92,7 @@ public class DynModuleDesignAction {
         if (StringUtils.isNotBlank(entityId)) {
             updateModuleEntityId = entityId;
         } else if (StringUtils.isNotBlank(entityIds)) {
-            Matcher matcher = pattern.matcher(entityIds);
+            Matcher matcher = patternNumber.matcher(entityIds);
             if (matcher.find()) {
                 updateModuleEntityId = matcher.group(1);
             }
@@ -276,6 +280,39 @@ public class DynModuleDesignAction {
         returnMap.put("isSuccess", Boolean.FALSE);
         returnMap.put("message", SpringUtil.getMessageBack("dodo.dynmodule.design.submit.fail", request));
         try {
+
+            List<String> valueIndexList = designBean.getValueIndex();
+            Set<String> valueIndexSet = new HashSet<String>(valueIndexList);
+            // 不允许重复
+            if (valueIndexSet.size() != valueIndexList.size()) {
+                returnMap.put("message", SpringUtil.getMessageBack(
+                        "dodo.privilege.dynmodule.config.infoTip.valueIndex.duplicate", request));
+                return returnMap;
+            }
+
+            for (String valueIndex : valueIndexList) {
+                // 不能为空
+                if (StringUtils.isBlank(valueIndex)) {
+                    returnMap.put("message", SpringUtil.getMessageBack("dodo.infotip.notnull",
+                            new Object[] { SpringUtil.getMessageBack(
+                                    "dodo.privilege.dynmodule.config.ModuleField.namekey.valueIndex", request) },
+                            request));
+                    return returnMap;
+                }
+                // 满足要求
+                if (!patternValueIndex.matcher(valueIndex).find()) {
+                    returnMap.put("message", SpringUtil.getMessageBack(
+                            "dodo.privilege.dynmodule.config.infoTip.valueIndex.reg", request));
+                    return returnMap;
+                }
+                // 首字母不是数字
+                if (patternNumber.matcher(StringUtils.substring(valueIndex, 0, 1)).find()) {
+                    returnMap.put("message", SpringUtil.getMessageBack(
+                            "dodo.privilege.dynmodule.config.infoTip.valueIndex.firstLetter", request));
+                    return returnMap;
+                }
+            }
+
             HqlHelper helper = HqlHelper.queryFrom(FormModel.class).fetch("id");
             for (String formModelId : designBean.getFormModel()) {
                 if (StringUtils.isBlank(formModelId)) {

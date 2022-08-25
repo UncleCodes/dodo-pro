@@ -217,6 +217,7 @@ public class SqlReportServiceImpl implements SqlReportService {
             reportField.setIsShow(designBean.getFieldIsShow().get(i));
             reportField.setValueList(StringUtils.isBlank(designBean.getValueList().get(i)) ? "" : designBean
                     .getValueList().get(i));
+            reportField.setValueIndex(CommonUtil.escapeHtml(designBean.getValueIndex().get(i)));
             reportField.setSortSeq(i);
 
             jumpLink = designBean.getJumpLink().get(i);

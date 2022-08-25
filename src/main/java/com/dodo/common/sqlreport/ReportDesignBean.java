@@ -29,6 +29,7 @@ public class ReportDesignBean {
     private List<String>             fieldLabel      = new ArrayList<String>();
     private List<String>             jumpLink        = new ArrayList<String>();
     private List<String>             valueList       = new ArrayList<String>();
+    private List<String>             valueIndex      = new ArrayList<String>();
     private List<Boolean>            fieldIsShow     = new ArrayList<Boolean>();
     private List<String>             fieldQueryType  = new ArrayList<String>();
 
@@ -142,6 +143,14 @@ public class ReportDesignBean {
 
     public void setValueList(List<String> valueList) {
         this.valueList = valueList;
+    }
+
+    public List<String> getValueIndex() {
+        return valueIndex;
+    }
+
+    public void setValueIndex(List<String> valueIndex) {
+        this.valueIndex = valueIndex;
     }
 
     @Override
