@@ -30,6 +30,7 @@ public class DynamicModuleDesignBean {
     private List<String>             fieldType       = new ArrayList<String>();
     private List<String>             fieldLabel      = new ArrayList<String>();
     private List<String>             jumpLink        = new ArrayList<String>();
+    private List<String>             valueList       = new ArrayList<String>();
     private List<Boolean>            fieldIsShow     = new ArrayList<Boolean>();
     private List<String>             fieldQueryType  = new ArrayList<String>();
 
@@ -244,6 +245,14 @@ public class DynamicModuleDesignBean {
 
     public void setFormModel(List<String> formModel) {
         this.formModel = formModel;
+    }
+
+    public List<String> getValueList() {
+        return valueList;
+    }
+
+    public void setValueList(List<String> valueList) {
+        this.valueList = valueList;
     }
 
     @Override

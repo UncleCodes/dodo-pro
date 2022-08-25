@@ -95,13 +95,16 @@ public class FreeStateFileRmJob implements Job {
                 }
 
                 for (File tempFile : tempFiles) {
+                    if (!tempFile.exists()) {
+                        continue;
+                    }
                     if (tempFile.getParentFile().getName().startsWith("dododoc")) {
                         org.apache.commons.io.FileUtils.deleteDirectory(tempFile.getParentFile());
                     } else {
                         tempFile.delete();
                     }
-                    freeStateFilesIds.add(record.get("id"));
                 }
+                freeStateFilesIds.add(record.get("id"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -80,6 +80,9 @@ public class ModuleField extends BaseEntity {
             infoTipKey = "dodo.privilege.dynmodule.config.ModuleField.infoTip.jumpLink")
     private String            jumpLink;
 
+    @DodoField(sortSeq = 7, nameKey = "dodo.privilege.dynmodule.config.ModuleField.namekey.valueList", maxLength = 200)
+    private String            valueList;
+
     @ManyToOne
     public ModuleEntity getModuleEntity() {
         return moduleEntity;
@@ -142,5 +145,14 @@ public class ModuleField extends BaseEntity {
 
     public void setJumpLink(String jumpLink) {
         this.jumpLink = jumpLink;
+    }
+
+    @Column(length = 200)
+    public String getValueList() {
+        return valueList;
+    }
+
+    public void setValueList(String valueList) {
+        this.valueList = valueList;
     }
 }

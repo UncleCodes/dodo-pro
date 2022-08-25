@@ -80,6 +80,9 @@ public class ReportField extends BaseEntity {
             infoTipKey = "dodo.privilege.report.config.ReportField.infoTip.jumpLink")
     private String            jumpLink;
 
+    @DodoField(sortSeq = 7, nameKey = "dodo.privilege.report.config.ReportField.namekey.valueList", maxLength = 200)
+    private String            valueList;
+
     @ManyToOne
     public ReportEntity getReportEntity() {
         return reportEntity;
@@ -142,5 +145,14 @@ public class ReportField extends BaseEntity {
 
     public void setJumpLink(String jumpLink) {
         this.jumpLink = jumpLink;
+    }
+
+    @Column(length = 200)
+    public String getValueList() {
+        return valueList;
+    }
+
+    public void setValueList(String valueList) {
+        this.valueList = valueList;
     }
 }
