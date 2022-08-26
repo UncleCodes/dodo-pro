@@ -48,26 +48,26 @@ public class ReportQueryUtil {
                     || reportField.getQueryType() == ReportQueryType.le
                     || reportField.getQueryType() == ReportQueryType.like
                     || reportField.getQueryType() == ReportQueryType.notLike) {
-                queryField = "queryField_" + reportField.getId();
+                queryField = reportField.getValueIndex();
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
             } else if (reportField.getQueryType() == ReportQueryType.between
                     || reportField.getQueryType() == ReportQueryType.notBetween) {
-                queryField = "queryField_" + reportField.getId() + "_begin";
+                queryField = reportField.getValueIndex() + "_begin";
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
-                queryField = "queryField_" + reportField.getId() + "_end";
+                queryField = reportField.getValueIndex() + "_end";
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
             } else if (reportField.getQueryType() == ReportQueryType.in
                     || reportField.getQueryType() == ReportQueryType.notIn) {
-                queryField = "queryField_" + reportField.getId();
+                queryField = reportField.getValueIndex();
                 queryFieldValues = request.getParameterValues(queryField);
                 if (queryFieldValues != null && queryFieldValues.length > 0) {
                     List<String> list = new ArrayList<String>();
@@ -80,7 +80,7 @@ public class ReportQueryUtil {
                         queryParams.put(queryField, list);
                     }
                 } else {
-                    queryField = "queryField_" + reportField.getId() + "[]";
+                    queryField = reportField.getValueIndex() + "[]";
                     queryFieldValues = request.getParameterValues(queryField);
                     if (queryFieldValues != null && queryFieldValues.length > 0) {
                         List<String> list = new ArrayList<String>();
@@ -121,7 +121,7 @@ public class ReportQueryUtil {
                     || reportField.getQueryType() == ReportQueryType.lt
                     || reportField.getQueryType() == ReportQueryType.ge
                     || reportField.getQueryType() == ReportQueryType.le) {
-                queryField = "queryField_" + reportField.getId();
+                queryField = reportField.getValueIndex();
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 if (queryFieldValue != null) {
                     whereClause.append(" and ");
@@ -155,14 +155,14 @@ public class ReportQueryUtil {
                 }
             } else if (reportField.getQueryType() == ReportQueryType.isNull
                     || reportField.getQueryType() == ReportQueryType.isNotNull) {
-                if (parsedQueryFields.get("queryField_" + reportField.getId()) != null) {
+                if (parsedQueryFields.get(reportField.getValueIndex()) != null) {
                     whereClause.append(" and ");
                     whereClause.append(MessageFormat.format(reportField.getQueryType().getExpression(),
                             CommonUtil.unEscapeHtml(reportField.getQueryField())));
                 }
             } else if (reportField.getQueryType() == ReportQueryType.like
                     || reportField.getQueryType() == ReportQueryType.notLike) {
-                queryField = "queryField_" + reportField.getId();
+                queryField = reportField.getValueIndex();
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 if (queryFieldValue != null) {
                     whereClause.append(" and ");
@@ -172,8 +172,8 @@ public class ReportQueryUtil {
                 }
             } else if (reportField.getQueryType() == ReportQueryType.between
                     || reportField.getQueryType() == ReportQueryType.notBetween) {
-                queryField = "queryField_" + reportField.getId() + "_begin";
-                queryField2 = "queryField_" + reportField.getId() + "_end";
+                queryField = reportField.getValueIndex() + "_begin";
+                queryField2 = reportField.getValueIndex() + "_end";
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 queryFieldValue2 = (String) parsedQueryFields.get(queryField2);
                 if (queryFieldValue != null && queryFieldValue2 != null) {
@@ -214,7 +214,7 @@ public class ReportQueryUtil {
                 }
             } else if (reportField.getQueryType() == ReportQueryType.in
                     || reportField.getQueryType() == ReportQueryType.notIn) {
-                queryField = "queryField_" + reportField.getId();
+                queryField = reportField.getValueIndex();
                 queryFieldValues = (List<String>) parsedQueryFields.get(queryField);
                 if (queryFieldValues != null && queryFieldValues.size() > 0) {
                     StringBuilder sbBuilder = new StringBuilder();

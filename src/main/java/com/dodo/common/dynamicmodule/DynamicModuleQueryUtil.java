@@ -48,26 +48,26 @@ public class DynamicModuleQueryUtil {
                     || moduleField.getQueryType() == ReportQueryType.le
                     || moduleField.getQueryType() == ReportQueryType.like
                     || moduleField.getQueryType() == ReportQueryType.notLike) {
-                queryField = "queryField_" + moduleField.getId();
+                queryField = moduleField.getValueIndex();
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.between
                     || moduleField.getQueryType() == ReportQueryType.notBetween) {
-                queryField = "queryField_" + moduleField.getId() + "_begin";
+                queryField = moduleField.getValueIndex() + "_begin";
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
-                queryField = "queryField_" + moduleField.getId() + "_end";
+                queryField = moduleField.getValueIndex() + "_end";
                 queryFieldValue = request.getParameter(queryField);
                 if (StringUtils.isNotBlank(queryFieldValue)) {
                     queryParams.put(queryField, queryFieldValue.trim());
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.in
                     || moduleField.getQueryType() == ReportQueryType.notIn) {
-                queryField = "queryField_" + moduleField.getId();
+                queryField = moduleField.getValueIndex();
                 queryFieldValues = request.getParameterValues(queryField);
                 if (queryFieldValues != null && queryFieldValues.length > 0) {
                     List<String> list = new ArrayList<String>();
@@ -80,7 +80,7 @@ public class DynamicModuleQueryUtil {
                         queryParams.put(queryField, list);
                     }
                 } else {
-                    queryField = "queryField_" + moduleField.getId() + "[]";
+                    queryField = moduleField.getValueIndex() + "[]";
                     queryFieldValues = request.getParameterValues(queryField);
                     if (queryFieldValues != null && queryFieldValues.length > 0) {
                         List<String> list = new ArrayList<String>();
@@ -121,7 +121,7 @@ public class DynamicModuleQueryUtil {
                     || moduleField.getQueryType() == ReportQueryType.lt
                     || moduleField.getQueryType() == ReportQueryType.ge
                     || moduleField.getQueryType() == ReportQueryType.le) {
-                queryField = "queryField_" + moduleField.getId();
+                queryField = moduleField.getValueIndex();
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 if (queryFieldValue != null) {
                     whereClause.append(" and ");
@@ -155,14 +155,14 @@ public class DynamicModuleQueryUtil {
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.isNull
                     || moduleField.getQueryType() == ReportQueryType.isNotNull) {
-                if (parsedQueryFields.get("queryField_" + moduleField.getId()) != null) {
+                if (parsedQueryFields.get(moduleField.getValueIndex()) != null) {
                     whereClause.append(" and ");
                     whereClause.append(MessageFormat.format(moduleField.getQueryType().getExpression(),
                             CommonUtil.unEscapeHtml(moduleField.getQueryField())));
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.like
                     || moduleField.getQueryType() == ReportQueryType.notLike) {
-                queryField = "queryField_" + moduleField.getId();
+                queryField = moduleField.getValueIndex();
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 if (queryFieldValue != null) {
                     whereClause.append(" and ");
@@ -172,8 +172,8 @@ public class DynamicModuleQueryUtil {
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.between
                     || moduleField.getQueryType() == ReportQueryType.notBetween) {
-                queryField = "queryField_" + moduleField.getId() + "_begin";
-                queryField2 = "queryField_" + moduleField.getId() + "_end";
+                queryField = moduleField.getValueIndex() + "_begin";
+                queryField2 = moduleField.getValueIndex() + "_end";
                 queryFieldValue = (String) parsedQueryFields.get(queryField);
                 queryFieldValue2 = (String) parsedQueryFields.get(queryField2);
                 if (queryFieldValue != null && queryFieldValue2 != null) {
@@ -214,7 +214,7 @@ public class DynamicModuleQueryUtil {
                 }
             } else if (moduleField.getQueryType() == ReportQueryType.in
                     || moduleField.getQueryType() == ReportQueryType.notIn) {
-                queryField = "queryField_" + moduleField.getId();
+                queryField = moduleField.getValueIndex();
                 queryFieldValues = (List<String>) parsedQueryFields.get(queryField);
                 if (queryFieldValues != null && queryFieldValues.size() > 0) {
                     StringBuilder sbBuilder = new StringBuilder();
