@@ -195,8 +195,8 @@ class MakeBaseDataUtil {
                     buttonName = hibernateConfigUtil.getPrivilegeMessage(buttonRight.nameKey());
                 }
                 buttonPath = buttonRight.path();
-                if (buttonRight.event() == DodoButtonRightEvent.AJAX
-                        || buttonRight.event() == DodoButtonRightEvent.EDIT_PROPERTY) {
+                if ((buttonRight.event() == DodoButtonRightEvent.AJAX || buttonRight.event() == DodoButtonRightEvent.EDIT_PROPERTY)
+                        && !buttonRight.path().contains("${rootPath}") && !buttonRight.path().contains("${webHomeUrl}")) {
                     buttonPath = ("/" + buttonPath).replaceAll("[/]{2,}", "/");
                     buttonPath = (buttonPath.endsWith("/") ? buttonPath.substring(0, buttonPath.length() - 1)
                             : buttonPath) + ".jhtml";
