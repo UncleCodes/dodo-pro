@@ -52,14 +52,12 @@ import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
         nameKey = "dodo.privilege.dynmodule.config.ModuleEntity.button.viewreport.namekey",
         path = "${rootPath}/dynamicmodule/view.jhtml",
         model = DodoButtonRightModel.ROW,
-        urlTarget = "_blank",
         event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         nameKey = "dodo.privilege.dynmodule.config.ModuleEntity.button.design.namekey",
         path = "${rootPath}/dynamicmodule/design.jhtml",
         model = DodoButtonRightModel.MODEL,
         event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank",
         location = DodoButtonLocation.TOP)
 public class ModuleEntity extends BaseEntity {
     private static final long  serialVersionUID = -2026205118666904848L;

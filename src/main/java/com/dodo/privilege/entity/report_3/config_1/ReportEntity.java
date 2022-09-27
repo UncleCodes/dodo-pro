@@ -50,14 +50,12 @@ import com.dodo.common.framework.entity.BaseEntity;
         nameKey = "dodo.privilege.report.config.ReportEntity.button.viewreport.namekey",
         path = "${rootPath}/sqlreport/report.jhtml",
         model = DodoButtonRightModel.ROW,
-        urlTarget = "_blank",
         event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         nameKey = "dodo.privilege.report.config.ReportEntity.button.design.namekey",
         path = "${rootPath}/sqlreport/design.jhtml",
         model = DodoButtonRightModel.MODEL,
         event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank",
         location = DodoButtonLocation.TOP)
 public class ReportEntity extends BaseEntity {
     private static final long serialVersionUID = -2026205118666904848L;

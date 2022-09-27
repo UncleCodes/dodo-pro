@@ -50,8 +50,7 @@ import com.dodo.common.framework.entity.BaseEntity;
         path = "https://www.0yi0.com",
         model = DodoButtonRightModel.MODEL,
         location = DodoButtonLocation.TOP,
-        event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank")
+        event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         name = "行AJAX",
         path = "/row/ajax",
@@ -62,20 +61,17 @@ import com.dodo.common.framework.entity.BaseEntity;
         name = "后台URL",
         path = "${rootPath}/special/view.jhtml",
         model = DodoButtonRightModel.ROW,
-        event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank")
+        event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         name = "前台URL",
         path = "${webHomeUrl}/test.html",
         model = DodoButtonRightModel.ROW,
-        event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank")
+        event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         name = "站外URL",
         path = "https://www.0yi0.com",
         model = DodoButtonRightModel.ROW,
-        event = DodoButtonRightEvent.URL,
-        urlTarget = "_blank")
+        event = DodoButtonRightEvent.URL)
 @DodoButtonRight(
         name = "处理",
         path = "/row/deal_busi",
