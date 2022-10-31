@@ -30,8 +30,27 @@ import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleButton;
  * @version
  */
 public class FormModelUtil {
+
+    // 更新
+    public static Map<String, Object> prepareFormModelUpdateParams(HqlHelperService helperService, String formModelId,
+            String moduleBtnId, String formModelPostUrl, Map<String, Object> autoAddParams,
+            Map<String, Object> valuesMap) {
+        return prepareFormModelParams(helperService, formModelId, moduleBtnId, formModelPostUrl, autoAddParams,
+                valuesMap);
+    }
+
+    // 添加
     public static Map<String, Object> prepareFormModelAddParams(HqlHelperService helperService, String formModelId,
             String moduleBtnId, String formModelPostUrl, Map<String, Object> autoAddParams) {
+        return prepareFormModelParams(helperService, formModelId, moduleBtnId, formModelPostUrl, autoAddParams, null);
+    }
+
+    public static Map<String, Object> prepareFormModelParams(HqlHelperService helperService, String formModelId,
+            String moduleBtnId, String formModelPostUrl, Map<String, Object> autoAddParams,
+            Map<String, Object> valuesMap) {
+        if (valuesMap == null) {
+            valuesMap = new HashMap<String, Object>();
+        }
 
         HqlHelper helper = HqlHelper.queryFrom(FormModelField.class);
         // 字段
@@ -73,7 +92,7 @@ public class FormModelUtil {
         model.put("formModelPostUrl", formModelPostUrl);
         model.put("formModelAddView", "formmodel_toadd");
         model.put("autoAddParams", autoAddParams);
-
+        model.put("valuesMap", valuesMap);
         return model;
     }
 }

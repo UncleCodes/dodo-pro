@@ -194,7 +194,7 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             sortSeq = 24,
             nameKey = "dodo.privilege.admin.config.FormModelField.namekey.fileStyle",
             showOnField = "fieldType",
-            showOnValue = "SINGLEFILE",
+            showOnValue = "SINGLEFILE,MULTIFILE",
             isnullable = false)
     private FileStyle            fileStyle;
 
@@ -209,7 +209,7 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
     public void onSave() {
         super.onSave();
         if (fileStyle == null) {
-            fileStyle = FileStyle.FullInfo;
+            fileStyle = FileStyle.OnlyPath;
         }
     }
 
@@ -217,7 +217,7 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
     public void onUpdate() {
         super.onUpdate();
         if (fileStyle == null) {
-            fileStyle = FileStyle.FullInfo;
+            fileStyle = FileStyle.OnlyPath;
         }
     }
 
