@@ -1,7 +1,5 @@
 package com.dodo.common.framework.service.impl;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,13 +10,15 @@ import org.apache.commons.lang3.StringUtils;
 import com.dodo.common.annotation.menu.DodoMenuLevel;
 import com.dodo.common.annotation.report.ReportFieldType;
 import com.dodo.common.annotation.report.ReportQueryType;
+import com.dodo.common.database.data.Record;
+import com.dodo.common.database.data.Records;
 import com.dodo.common.database.hql.HqlHelper;
 import com.dodo.common.database.hql.HqlHelper.MatchType;
+import com.dodo.common.database.naming.DatabaseNameConverter;
+import com.dodo.common.framework.dao.BaseJdbcDao;
 import com.dodo.common.framework.dao.HqlHelperDao;
 import com.dodo.common.framework.service.SqlReportService;
 import com.dodo.common.sqlreport.ReportDesignBean;
-import com.dodo.common.sqlreport.SqlReportException;
-import com.dodo.privilege.entity.admin_1.base_1.Role;
 import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
 import com.dodo.privilege.entity.admin_1.config_5.Right;
 import com.dodo.privilege.entity.report_3.config_1.ReportEntity;
@@ -26,7 +26,6 @@ import com.dodo.privilege.entity.report_3.config_1.ReportField;
 import com.dodo.privilege.entity.report_3.config_1.ReportMenu;
 import com.dodo.security.DodoSecurityMetadataSource;
 import com.dodo.utils.CommonUtil;
-import com.dodo.utils.SpringUtil;
 import com.dodo.utils.config.DodoFrameworkConfigUtil;
 
 /**
@@ -39,7 +38,11 @@ import com.dodo.utils.config.DodoFrameworkConfigUtil;
  * @version v 1.0
  */
 public class SqlReportServiceImpl implements SqlReportService {
-    private HqlHelperDao helperDao;
+    private HqlHelperDao          helperDao;
+
+    private BaseJdbcDao           jdbcDao;
+
+    private DatabaseNameConverter databaseNameConverter;
 
     public HqlHelperDao getHelperDao() {
         return helperDao;
@@ -47,6 +50,22 @@ public class SqlReportServiceImpl implements SqlReportService {
 
     public void setHelperDao(HqlHelperDao helperDao) {
         this.helperDao = helperDao;
+    }
+
+    public DatabaseNameConverter getDatabaseNameConverter() {
+        return databaseNameConverter;
+    }
+
+    public void setDatabaseNameConverter(DatabaseNameConverter databaseNameConverter) {
+        this.databaseNameConverter = databaseNameConverter;
+    }
+
+    public BaseJdbcDao getJdbcDao() {
+        return jdbcDao;
+    }
+
+    public void setJdbcDao(BaseJdbcDao jdbcDao) {
+        this.jdbcDao = jdbcDao;
     }
 
     @Override
@@ -105,39 +124,40 @@ public class SqlReportServiceImpl implements SqlReportService {
             helperDao.update(reportEntityMenu);
         }
 
-        List<MenuInfo> clildMenuInfos = reportEntityMenu.getChildMenuInfo();
-        if (clildMenuInfos != null && clildMenuInfos.size() > 0) {
-            List<MenuInfo> tobeRemove = new ArrayList<MenuInfo>(clildMenuInfos.size());
-            Serializable idLong = null;
-            helper.resetQueryFrom(ReportEntity.class).fetch("id");
-            List<Right> allRights = null;
-            List<Role> allRoles = null;
-            for (MenuInfo child : clildMenuInfos) {
-                idLong = DodoFrameworkConfigUtil.getRightTypeIdValue(StringUtils.substringBefore(
-                        StringUtils.substringAfterLast(child.getMenuLink(), "/"), "."));
-                if (helperDao.getRecord(helper.resetQueryParameters().eq("id", idLong)) != null) {
-                    continue;
-                }
-                allRights = child.getAllRights();
-                if (allRights != null) {
-                    child.setAllRights(null);
-                    if (allRoles == null) {
-                        allRoles = helperDao.getEntitys(Role.class);
-                    }
-                    for (Right right : allRights) {
-                        for (Role role : allRoles) {
-                            role.getAllRights().remove(right);
-                        }
-                        helperDao.delete(right);
-                    }
-                }
-                tobeRemove.add(child);
-            }
-            for (MenuInfo menuInfo : tobeRemove) {
-                clildMenuInfos.remove(menuInfo);
-                helperDao.delete(menuInfo);
-            }
-        }
+        // 在报表管理 - 删除已处理
+        //        List<MenuInfo> clildMenuInfos = reportEntityMenu.getChildMenuInfo();
+        //        if (clildMenuInfos != null && clildMenuInfos.size() > 0) {
+        //            List<MenuInfo> tobeRemove = new ArrayList<MenuInfo>(clildMenuInfos.size());
+        //            Serializable idLong = null;
+        //            helper.resetQueryFrom(ReportEntity.class).fetch("id");
+        //            List<Right> allRights = null;
+        //            List<Role> allRoles = null;
+        //            for (MenuInfo child : clildMenuInfos) {
+        //                idLong = DodoFrameworkConfigUtil.getRightTypeIdValue(StringUtils.substringBefore(
+        //                        StringUtils.substringAfterLast(child.getMenuLink(), "/"), "."));
+        //                if (helperDao.getRecord(helper.resetQueryParameters().eq("id", idLong)) != null) {
+        //                    continue;
+        //                }
+        //                allRights = child.getAllRights();
+        //                if (allRights != null) {
+        //                    child.setAllRights(null);
+        //                    if (allRoles == null) {
+        //                        allRoles = helperDao.getEntitys(Role.class);
+        //                    }
+        //                    for (Right right : allRights) {
+        //                        for (Role role : allRoles) {
+        //                            role.getAllRights().remove(right);
+        //                        }
+        //                        helperDao.delete(right);
+        //                    }
+        //                }
+        //                tobeRemove.add(child);
+        //            }
+        //            for (MenuInfo menuInfo : tobeRemove) {
+        //                clildMenuInfos.remove(menuInfo);
+        //                helperDao.delete(menuInfo);
+        //            }
+        //        }
 
         // 插入当前菜单
         String menuLink = new StringBuilder().append("/sqlreport/report/").append(reportEntity.getId())
@@ -225,41 +245,41 @@ public class SqlReportServiceImpl implements SqlReportService {
                 jumpLink = jumpLink.trim();
                 reportField.setJumpLink(jumpLink);
                 // 后台菜单
-                if (jumpLink.startsWith("{rootPath}")) {
-                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");
-                    jumpLinkRight = jumpLinkRight.replace("{rootPath}", "");
-
-                    // 获得一个权限
-                    helper.resetQueryFrom(Right.class).eq("rightLink", jumpLinkRight);
-                    Right rightField = helperDao.getEntity(helper);
-                    if (rightField == null) {
-                        rightField = new Right();
-                        rightField.setRightLink(jumpLinkRight);
-                        rightField.setRightName(reportEntity.getName()
-                                + "_DETAIL_"
-                                + (StringUtils.isBlank(reportField.getShowName()) ? CommonUtil.escapeHtml(reportField
-                                        .getQueryField()) : reportField.getShowName()));
-                        rightField.setRightCode(getNextRightCodeCode());
-                        rightField.setMenuInfo(menuInfo);
-                        helperDao.save(rightField);
-                    } else if (rightField.getMenuInfo() == null) {
-                        rightField.setRightName(reportEntity.getName()
-                                + "_DETAIL_"
-                                + (StringUtils.isBlank(reportField.getShowName()) ? CommonUtil.escapeHtml(reportField
-                                        .getQueryField()) : reportField.getShowName()));
-                        rightField.setMenuInfo(menuInfo);
-                        rightField.setRightRemark(null);
-                        helperDao.update(rightField);
-                    } else if (((Object) rightField.getMenuInfo().getId()).equals((Object) menuInfo.getId())) {
-                        rightField.setRightRemark(null);
-                        helperDao.update(rightField);
-                    }
-                    // 链接已经在别的菜单下存在
-                    else {
-                        throw new SqlReportException(SpringUtil.getMessageBack("dodo.sqlreport.duplicate.jumplink",
-                                new Object[] { jumpLink }, request));
-                    }
-                }
+                //                if (jumpLink.startsWith("{rootPath}")) {
+                //                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");
+                //                    jumpLinkRight = jumpLinkRight.replace("{rootPath}", "");
+                //
+                //                    // 获得一个权限
+                //                    helper.resetQueryFrom(Right.class).eq("rightLink", jumpLinkRight);
+                //                    Right rightField = helperDao.getEntity(helper);
+                //                    if (rightField == null) {
+                //                        rightField = new Right();
+                //                        rightField.setRightLink(jumpLinkRight);
+                //                        rightField.setRightName(reportEntity.getName()
+                //                                + "_DETAIL_"
+                //                                + (StringUtils.isBlank(reportField.getShowName()) ? CommonUtil.escapeHtml(reportField
+                //                                        .getQueryField()) : reportField.getShowName()));
+                //                        rightField.setRightCode(getNextRightCodeCode());
+                //                        rightField.setMenuInfo(menuInfo);
+                //                        helperDao.save(rightField);
+                //                    } else if (rightField.getMenuInfo() == null) {
+                //                        rightField.setRightName(reportEntity.getName()
+                //                                + "_DETAIL_"
+                //                                + (StringUtils.isBlank(reportField.getShowName()) ? CommonUtil.escapeHtml(reportField
+                //                                        .getQueryField()) : reportField.getShowName()));
+                //                        rightField.setMenuInfo(menuInfo);
+                //                        rightField.setRightRemark(null);
+                //                        helperDao.update(rightField);
+                //                    } else if (((Object) rightField.getMenuInfo().getId()).equals((Object) menuInfo.getId())) {
+                //                        rightField.setRightRemark(null);
+                //                        helperDao.update(rightField);
+                //                    }
+                //                    // 链接已经在别的菜单下存在
+                //                    else {
+                //                        throw new SqlReportException(SpringUtil.getMessageBack("dodo.sqlreport.duplicate.jumplink",
+                //                                new Object[] { jumpLink }, request));
+                //                    }
+                //                }
             }
             if (StringUtils.isNotBlank(reportField.getId())) {
                 helperDao.update(reportField);
@@ -270,8 +290,22 @@ public class SqlReportServiceImpl implements SqlReportService {
         }
 
         // 更新失效权限
-        helper.resetQueryFrom(Right.class).update("menuInfo", null).eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
-        helperDao.update(helper);
+        //        helper.resetQueryFrom(Right.class).update("menuInfo", null).eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
+        //        helperDao.update(helper);
+
+        helper.resetQueryFrom(Right.class).fetch("id").eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
+        Records tempRights = helperDao.getRecords(helper, Boolean.TRUE);
+        for (Record tempRight : tempRights) {
+            String rightId = tempRight.get("id");
+            // 删除角色-权限
+            jdbcDao.update("delete from " + databaseNameConverter.getTablePrefix()
+                    + "_role_right where all_rights_id = ?", rightId);
+            // 删除管理员-权限
+            jdbcDao.update("delete from " + databaseNameConverter.getTablePrefix()
+                    + "_admin_right where temp_rights_id = ?", rightId);
+            // 删除权限
+            helperDao.delete(HqlHelper.queryFrom(Right.class).eq("id", rightId));
+        }
 
         DodoSecurityMetadataSource.refreshSysMetadata = Boolean.TRUE;
     }

@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dodo.common.annotation.menu.DodoMenuLevel;
 import com.dodo.common.annotation.report.ReportFieldType;
 import com.dodo.common.annotation.report.ReportQueryType;
+import com.dodo.common.database.data.Record;
 import com.dodo.common.database.hql.HqlHelper;
 import com.dodo.common.dynamicmodule.DynamicModuleDesignBean;
 import com.dodo.common.dynamicmodule.DynamicModuleQueryResult;
@@ -40,8 +41,11 @@ import com.dodo.common.framework.service.DynamicModuleService;
 import com.dodo.common.framework.service.HqlHelperService;
 import com.dodo.common.framework.service.JdbcService;
 import com.dodo.common.sqlreport.SqlReportLimit;
+import com.dodo.privilege.entity.admin_1.base_1.Admin;
 import com.dodo.privilege.entity.admin_1.config_5.FormModel;
 import com.dodo.privilege.entity.admin_1.config_5.MenuInfo;
+import com.dodo.privilege.entity.admin_1.config_5.Right;
+import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleButton;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleEntity;
 import com.dodo.privilege.entity.dynmodule_4.config_1.ModuleField;
 import com.dodo.privilege.security.DodoSecurityService;
@@ -375,9 +379,35 @@ public class DynModuleDesignAction {
             pageSize = 20;
         }
         try {
+            Admin admin = (Admin) dodoSecurityService.getLoginPrincipal();
+            model.addAttribute("admin", admin);
+
             ModuleEntity moduleEntity = hqlHelperService.get(DodoFrameworkConfigUtil.getRightTypeIdValue(moduleId),
                     ModuleEntity.class);
             model.addAttribute("moduleEntity", moduleEntity);
+
+            // 初始化按钮权限
+            String menuLink = new StringBuilder().append("/dynamicmodule/view/").append(moduleEntity.getId())
+                    .append(".jhtml").toString();
+            HqlHelper helper = HqlHelper.queryFrom(MenuInfo.class).eq("menuLink", menuLink);
+            MenuInfo menuInfo = hqlHelperService.getEntity(helper);
+
+            // 查询按钮权限
+            helper = helper.resetQueryFrom(Right.class).fetch("rightCode");
+            Map<String, String> btnCodes = new HashMap<String, String>();
+            List<ModuleButton> moduleButtons = moduleEntity.getModuleButtons();
+            if (moduleButtons != null) {
+                for (ModuleButton btn : moduleButtons) {
+                    helper.resetQueryParameters().eq("rightName", btn.getBtnLabel()).eq("menuInfo", menuInfo);
+                    Record btnRight = hqlHelperService.getRecord(helper);
+                    if (btnRight != null) {
+                        String rightCode = btnRight.get("rightCode");
+                        btnCodes.put(btn.getBtnName(), rightCode);
+                    }
+                }
+            }
+            model.addAttribute("btnCodes", btnCodes);
+
             model.addAttribute("queryFlag", queryFlag);
             Map<String, Object> parsedQueryFields = DynamicModuleQueryUtil.parseQueryFields(
                     moduleEntity.getModuleFields(), request);

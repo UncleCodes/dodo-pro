@@ -9,9 +9,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.dodo.common.annotation.menu.DodoMenuLevel;
 import com.dodo.common.annotation.report.ReportFieldType;
 import com.dodo.common.annotation.report.ReportQueryType;
+import com.dodo.common.database.data.Record;
+import com.dodo.common.database.data.Records;
 import com.dodo.common.database.hql.HqlHelper;
 import com.dodo.common.database.hql.HqlHelper.MatchType;
+import com.dodo.common.database.naming.DatabaseNameConverter;
 import com.dodo.common.dynamicmodule.DynamicModuleDesignBean;
+import com.dodo.common.framework.dao.BaseJdbcDao;
 import com.dodo.common.framework.dao.HqlHelperDao;
 import com.dodo.common.framework.service.DynamicModuleService;
 import com.dodo.privilege.entity.admin_1.config_5.FormModel;
@@ -36,7 +40,11 @@ import com.dodo.utils.config.DodoFrameworkConfigUtil;
  * @version v 1.0
  */
 public class DynamicModuleServiceImpl implements DynamicModuleService {
-    private HqlHelperDao helperDao;
+    private HqlHelperDao          helperDao;
+
+    private BaseJdbcDao           jdbcDao;
+
+    private DatabaseNameConverter databaseNameConverter;
 
     public HqlHelperDao getHelperDao() {
         return helperDao;
@@ -44,6 +52,22 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
 
     public void setHelperDao(HqlHelperDao helperDao) {
         this.helperDao = helperDao;
+    }
+
+    public DatabaseNameConverter getDatabaseNameConverter() {
+        return databaseNameConverter;
+    }
+
+    public void setDatabaseNameConverter(DatabaseNameConverter databaseNameConverter) {
+        this.databaseNameConverter = databaseNameConverter;
+    }
+
+    public BaseJdbcDao getJdbcDao() {
+        return jdbcDao;
+    }
+
+    public void setJdbcDao(BaseJdbcDao jdbcDao) {
+        this.jdbcDao = jdbcDao;
     }
 
     @Override
@@ -195,6 +219,20 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             //                            new Object[] { btnUrl }, request));
             //                }
             //            }
+
+            helper.resetQueryFrom(Right.class).eq("rightName", moduleButton.getBtnLabel()).eq("menuInfo", menuInfo);
+            Right btnRight = helperDao.getEntity(helper);
+            if (btnRight == null) {
+                btnRight = new Right();
+                btnRight.setRightLink("");
+                btnRight.setRightName(moduleButton.getBtnLabel());
+                btnRight.setRightCode(getNextRightCodeCode());
+                btnRight.setMenuInfo(menuInfo);
+                helperDao.save(btnRight);
+            } else {
+                btnRight.setRightRemark(null);// 必须
+                helperDao.update(btnRight);
+            }
             helperDao.save(moduleButton);
         }
 
@@ -271,8 +309,21 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
         }
 
         // 更新失效权限
-        helper.resetQueryFrom(Right.class).update("menuInfo", null).eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
-        helperDao.update(helper);
+        //        helper.resetQueryFrom(Right.class).update("menuInfo", null).eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
+        //        helperDao.update(helper);
+        helper.resetQueryFrom(Right.class).fetch("id").eq("rightRemark", "Temp").eq("menuInfo", menuInfo);
+        Records tempRights = helperDao.getRecords(helper, Boolean.TRUE);
+        for (Record tempRight : tempRights) {
+            String rightId = tempRight.get("id");
+            // 删除角色-权限
+            jdbcDao.update("delete from " + databaseNameConverter.getTablePrefix()
+                    + "_role_right where all_rights_id = ?", rightId);
+            // 删除管理员-权限
+            jdbcDao.update("delete from " + databaseNameConverter.getTablePrefix()
+                    + "_admin_right where temp_rights_id = ?", rightId);
+            // 删除权限
+            helperDao.delete(HqlHelper.queryFrom(Right.class).eq("id", rightId));
+        }
 
         DodoSecurityMetadataSource.refreshSysMetadata = Boolean.TRUE;
     }

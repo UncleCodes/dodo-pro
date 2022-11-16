@@ -234,6 +234,8 @@
 		<property name="target">
 			<bean class="com.dodo.common.framework.service.impl.SqlReportServiceImpl">
 				<property name="helperDao" ref="hqlHelperDaoImpl"/>
+				<property name="jdbcDao" ref="baseJdbcDaoImpl"/>
+				<property name="databaseNameConverter" ref="databaseNameConverterHibernate"/>
 			</bean>
 		</property>
 	</bean>
@@ -242,6 +244,8 @@
 		<property name="target">
 			<bean class="com.dodo.common.framework.service.impl.DynamicModuleServiceImpl">
 				<property name="helperDao" ref="hqlHelperDaoImpl"/>
+				<property name="jdbcDao" ref="baseJdbcDaoImpl"/>
+				<property name="databaseNameConverter" ref="databaseNameConverterHibernate"/>
 			</bean>
 		</property>
 	</bean>

@@ -26,6 +26,7 @@ import com.dodo.common.annotation.right.DodoRowRight;
 import com.dodo.common.annotation.right.DodoRowRightGroup;
 import com.dodo.common.framework.bean.tree.DodoTree;
 import com.dodo.common.framework.entity.BaseEntity;
+import com.dodo.privilege.entity.admin_1.config_5.Right;
 import com.dodo.security.DodoUserDetails;
 
 /**
@@ -163,12 +164,24 @@ public class Admin extends BaseEntity implements DodoUserDetails {
 
     @DodoField(
             nameKey = "dodo.privilege.admin.base.Admin.namekey.roleSet",
-            isnullable = false,
             sortSeq = 33,
             isPopup = true,
             listable = false)
     @DodoViewGroup(groupSeq = 4, groupNameKey = "dodo.privilege.admin.base.Admin.groupName.4")
     private Set<Role>                    roleSet          = new HashSet<Role>();
+
+    @DodoField(
+            nameKey = "dodo.privilege.admin.base.Admin.namekey.roleGroupSet",
+            sortSeq = 35,
+            isPopup = true,
+            listable = false)
+    @DodoViewGroup(groupSeq = 4, groupNameKey = "dodo.privilege.admin.base.Admin.groupName.4")
+    private Set<RoleGroup>               roleGroupSet     = new HashSet<RoleGroup>();
+
+    @DodoField(nameKey = "dodo.privilege.admin.base.Admin.namekey.tempRights", sortSeq = 37, listable = false)
+    @DodoViewGroup(groupSeq = 4, groupNameKey = "dodo.privilege.admin.base.Admin.groupName.4")
+    private Set<Right>                   tempRights;
+
     private Collection<GrantedAuthority> authorities;
     private DodoTree                     menuInfoTree;
 
@@ -314,6 +327,26 @@ public class Admin extends BaseEntity implements DodoUserDetails {
 
     public void setRoleSet(Set<Role> paramSet) {
         this.roleSet = paramSet;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("sortSeq asc")
+    public Set<RoleGroup> getRoleGroupSet() {
+        return roleGroupSet;
+    }
+
+    public void setRoleGroupSet(Set<RoleGroup> roleGroupSet) {
+        this.roleGroupSet = roleGroupSet;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("sortSeq asc")
+    public Set<Right> getTempRights() {
+        return tempRights;
+    }
+
+    public void setTempRights(Set<Right> tempRights) {
+        this.tempRights = tempRights;
     }
 
     public void onSave() {

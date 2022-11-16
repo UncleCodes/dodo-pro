@@ -19,6 +19,7 @@ import com.dodo.common.annotation.field.DodoValueGenerator;
 import com.dodo.common.annotation.menu.DodoMenu;
 import com.dodo.common.annotation.tree.DodoTreeRef;
 import com.dodo.common.framework.entity.BaseEntity;
+import com.dodo.privilege.entity.admin_1.base_1.Admin;
 import com.dodo.privilege.entity.admin_1.base_1.Role;
 
 /**
@@ -111,6 +112,8 @@ public class Right extends BaseEntity implements java.io.Serializable {
 
     private Set<Role>         roles;
 
+    private Set<Admin>        admins;
+
     @Override
     public void onSave() {
         super.onSave();
@@ -161,6 +164,15 @@ public class Right extends BaseEntity implements java.io.Serializable {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @ManyToMany(mappedBy = "tempRights", fetch = FetchType.LAZY)
+    public Set<Admin> getAdmins() {
+        return admins;
+    }
+
+    public void setAdmins(Set<Admin> admins) {
+        this.admins = admins;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

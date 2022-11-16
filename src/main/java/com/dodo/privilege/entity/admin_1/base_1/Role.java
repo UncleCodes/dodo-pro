@@ -87,6 +87,8 @@ public class Role extends BaseEntity {
 
     private Set<Admin>          adminSet         = new HashSet<Admin>();
 
+    private Set<RoleGroup>      roleGroups       = new HashSet<RoleGroup>();
+
     @DodoField(nameKey = "dodo.privilege.admin.base.Role.namekey.rowrightConfiger", sortSeq = 7)
     private Map<String, String> rowrightConfiger;
 
@@ -156,6 +158,15 @@ public class Role extends BaseEntity {
 
     public void setAdminSet(Set<Admin> paramSet) {
         this.adminSet = paramSet;
+    }
+
+    @ManyToMany(mappedBy = "allRoles", fetch = FetchType.LAZY)
+    public Set<RoleGroup> getRoleGroups() {
+        return roleGroups;
+    }
+
+    public void setRoleGroups(Set<RoleGroup> roleGroups) {
+        this.roleGroups = roleGroups;
     }
 
     @Transient

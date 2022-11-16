@@ -39,6 +39,7 @@ import com.dodo.common.sqlreport.ReportQueryUtil;
 import com.dodo.common.sqlreport.SqlReportLimit;
 import com.dodo.common.sqlreport.SqlReportQueryResult;
 import com.dodo.common.sqlreport.SqlReportResultSetExtractor;
+import com.dodo.privilege.entity.admin_1.base_1.Admin;
 import com.dodo.privilege.entity.report_3.config_1.ReportEntity;
 import com.dodo.privilege.entity.report_3.config_1.ReportField;
 import com.dodo.privilege.entity.report_3.config_1.ReportMenu;
@@ -354,6 +355,9 @@ public class ReportDesignAction {
             pageSize = 20;
         }
         try {
+            Admin admin = (Admin) dodoSecurityService.getLoginPrincipal();
+            model.addAttribute("admin", admin);
+
             ReportEntity reportEntity = hqlHelperService.get(DodoFrameworkConfigUtil.getRightTypeIdValue(reportId),
                     ReportEntity.class);
             model.addAttribute("reportEntity", reportEntity);

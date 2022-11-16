@@ -110,7 +110,9 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
         Set<String> haveRights = new HashSet<String>();
         Set<String> haveRightQuerys = new HashSet<String>();
         Set<String> haveFieldRights = new HashSet<String>();
+        Set<Serializable> managerRightIds = new HashSet<Serializable>();
 
+        // 查询角色的对应的权限
         HqlHelper helper = HqlHelper.queryFrom(Admin.class);
         helper.join(HqlHelper.currTable, "roleSet", "r").fetchWithTable("r", "isSystem", "isSystem")
                 .join("r", "allRights", "ri").isNotNull("ri", "menuInfo").isNull("ri", "managerRight")
@@ -122,7 +124,6 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
         Records adminPrivs = hqlHelperDao.getRecords(helper, Boolean.TRUE);
         Record record = null;
         Ite ite = adminPrivs.iterator();
-        Set<Serializable> managerRightIds = new HashSet<Serializable>();
         while (ite.hasNext()) {
             record = ite.next();
             rightCode = record.get("rightCode");
@@ -138,9 +139,66 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
             }
             managerRightIds.add((Serializable) record.get("rightId"));
 
-            LOGGER.debug("Have Manager right--Key ['{}':'{}']", rightLink, rightCode);
+            LOGGER.debug("Have_Manager_Right_From_Role--Key ['{}':'{}']", rightLink, rightCode);
         }
 
+        // 查询角色组的对应的权限
+        helper = HqlHelper.queryFrom(Admin.class);
+        helper.join(HqlHelper.currTable, "roleGroupSet", "rg").join("rg", "allRoles", "r")
+                .fetchWithTable("r", "isSystem", "isSystem").join("r", "allRights", "ri").isNotNull("ri", "menuInfo")
+                .isNull("ri", "managerRight").fetchWithTable("ri", "rightCode", "rightCode")
+                .fetchWithTable("ri", "id", "rightId").fetchWithTable("ri", "rightLink", "rightLink")
+                .fetchWithTable("ri", "isSystem", "isSystemRight").eq("id", localAdmin.getId());
+        rightCode = null;
+        rightLink = null;
+        adminPrivs = hqlHelperDao.getRecords(helper, Boolean.TRUE);
+        record = null;
+        ite = adminPrivs.iterator();
+        while (ite.hasNext()) {
+            record = ite.next();
+            rightCode = record.get("rightCode");
+            rightLink = record.get("rightLink");
+            if ((Boolean) record.get("isSystem")) {
+                localAdmin.setIsSystemAdmin(Boolean.TRUE);
+            }
+            haveRights.add(rightCode);
+
+            if (StringUtils.isNotBlank(rightLink)
+                    && ((!(Boolean) record.get("isSystemRight")) || rightLink.contains(LIST_ACT_URL))) {
+                haveRightQuerys.add(rightCode);
+            }
+            managerRightIds.add((Serializable) record.get("rightId"));
+
+            LOGGER.debug("Have_Manager_Right_From_RoleGroup--Key ['{}':'{}']", rightLink, rightCode);
+        }
+
+        // 查询管理员的临时权限
+        helper = HqlHelper.queryFrom(Admin.class);
+        helper.join(HqlHelper.currTable, "tempRights", "ri").isNotNull("ri", "menuInfo").isNull("ri", "managerRight")
+                .fetchWithTable("ri", "rightCode", "rightCode").fetchWithTable("ri", "id", "rightId")
+                .fetchWithTable("ri", "rightLink", "rightLink").fetchWithTable("ri", "isSystem", "isSystemRight")
+                .eq("id", localAdmin.getId());
+        rightCode = null;
+        rightLink = null;
+        adminPrivs = hqlHelperDao.getRecords(helper, Boolean.TRUE);
+        record = null;
+        ite = adminPrivs.iterator();
+        while (ite.hasNext()) {
+            record = ite.next();
+            rightCode = record.get("rightCode");
+            rightLink = record.get("rightLink");
+            haveRights.add(rightCode);
+
+            if (StringUtils.isNotBlank(rightLink)
+                    && ((!(Boolean) record.get("isSystemRight")) || rightLink.contains(LIST_ACT_URL))) {
+                haveRightQuerys.add(rightCode);
+            }
+            managerRightIds.add((Serializable) record.get("rightId"));
+
+            LOGGER.debug("Have_Manager_Right_From_RoleGroup--Key ['{}':'{}']", rightLink, rightCode);
+        }
+
+        // 查询管理权限下的其他权限
         if (managerRightIds.size() > 0) {
             helper.resetQueryFrom(Right.class).isNotNull("menuInfo").in("managerRight.id", managerRightIds)
                     .fetch("isSystem", "rightCode", "rightLink");
@@ -159,6 +217,7 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
             }
         }
 
+        // 查询字段权限 - 角色配置
         helper.resetQueryFrom(Admin.class).join(HqlHelper.currTable, "roleSet", "r").join("r", "allFieldRights", "fri")
                 .fetchWithTable("fri", "rightCode", "fieldRightCode").fetchWithTable("fri", "id", "fieldRightId")
                 .eq("id", localAdmin.getId());
@@ -170,6 +229,19 @@ public class DodoSecurityServiceImpl implements DodoSecurityService {
             haveFieldRights.add((String) record.get("fieldRightCode"));
         }
 
+        // 查询字段权限 - 角色组配置
+        helper.resetQueryFrom(Admin.class).join(HqlHelper.currTable, "roleGroupSet", "rg").join("rg", "allRoles", "r")
+                .join("r", "allFieldRights", "fri").fetchWithTable("fri", "rightCode", "fieldRightCode")
+                .fetchWithTable("fri", "id", "fieldRightId").eq("id", localAdmin.getId());
+
+        adminPrivs = hqlHelperDao.getRecords(helper, Boolean.TRUE);
+        ite = adminPrivs.iterator();
+        while (ite.hasNext()) {
+            record = ite.next();
+            haveFieldRights.add((String) record.get("fieldRightCode"));
+        }
+
+        // 菜单
         List<DodoTreeNode> treeNodeList = new ArrayList<DodoTreeNode>();
         List<Object> menuIds = null;
         List<String> menuCodes = new ArrayList<String>();
