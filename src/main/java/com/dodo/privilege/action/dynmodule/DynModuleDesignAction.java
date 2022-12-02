@@ -322,6 +322,7 @@ public class DynModuleDesignAction {
                 if (StringUtils.isBlank(formModelId)) {
                     continue;
                 }
+                formModelId = StringUtils.substringAfter(formModelId, "|");
                 helper.resetQueryParameters().eq("id", formModelId);
                 if (hqlHelperService.getRecord(helper) == null) {
                     String formModelEntityName = SpringUtil.getMessageBack(

@@ -184,7 +184,8 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             moduleButton.setParamValueField(CommonUtil.escapeHtml(designBean.getParamValueField().get(i)));
             moduleButton.setParamName(CommonUtil.escapeHtml(designBean.getParamName().get(i)));
             if (StringUtils.isNotBlank(designBean.getFormModel().get(i))) {
-                moduleButton.setFormModel(helperDao.load(designBean.getFormModel().get(i), FormModel.class));
+                moduleButton.setFormModel(helperDao.load(
+                        StringUtils.substringAfter(designBean.getFormModel().get(i), "|"), FormModel.class));
             }
             moduleButton.setSortSeq(i);
             btnUrl = designBean.getBtnUrl().get(i).trim();
