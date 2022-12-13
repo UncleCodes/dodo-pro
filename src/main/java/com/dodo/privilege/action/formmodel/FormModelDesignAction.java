@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dodo.common.framework.service.HqlHelperService;
-import com.dodo.utils.FormModelUtil;
+import com.dodo.privilege.formmodel.FormModelProcessParams;
+import com.dodo.privilege.formmodel.FormModelProcesser;
 import com.dodo.utils.RespData;
 
 /**
@@ -40,12 +41,12 @@ public class FormModelDesignAction {
         autoAddParams.put("selfParam_02", "selfParam_02");
         autoAddParams.put("selfParam_03", "selfParam_03");
 
-        Map<String, Object> formModelAddParams = FormModelUtil.prepareFormModelAddParams(helperService, entityId, "0",
-                formModelPostUrl, autoAddParams);
+        FormModelProcessParams processParams = FormModelProcesser.processFormModelParams(helperService, entityId, "0",
+                formModelPostUrl, autoAddParams, null);
 
-        model.addAllAttributes(formModelAddParams);
+        model.addAttribute(FormModelProcesser.MODEL_KEY_IN_VIEW, processParams);
 
-        return (String) formModelAddParams.get("formModelAddView");
+        return (String) processParams.getFormModelProcessView();
     }
 
     @RequestMapping("/vide_design_post.jhtml")

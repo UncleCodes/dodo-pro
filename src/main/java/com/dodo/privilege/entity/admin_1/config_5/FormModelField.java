@@ -44,7 +44,8 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             isnullable = false,
             editable = false,
             queryOnList = true,
-            isSetDefault = false)
+            isSetDefault = false,
+            isPopup = true)
     private FormModel            formModel;
 
     @DodoField(
@@ -145,15 +146,6 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             showOnValue = "NUMBER,DIGITS")
     private Integer              maxValue;
 
-    @DodoField(sortSeq = 18, nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTip")
-    private String               infoTip;
-
-    @DodoField(
-            sortSeq = 19,
-            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTipKey",
-            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.infoTipKey")
-    private String               infoTipKey;
-
     @DodoField(
             sortSeq = 20,
             nameKey = "dodo.privilege.admin.config.FormModelField.namekey.maxFileSize",
@@ -177,8 +169,7 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             nameKey = "dodo.privilege.admin.config.FormModelField.namekey.valueList",
             showOnField = "fieldType",
             showOnValue = "SELECT,RADIO,CHECKBOX",
-            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.valueList",
-            isnullable = false)
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.valueList")
     private String               valueList;
 
     @DodoField(
@@ -186,8 +177,7 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             nameKey = "dodo.privilege.admin.config.FormModelField.namekey.labelList",
             showOnField = "fieldType",
             showOnValue = "SELECT,RADIO,CHECKBOX",
-            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.labelList",
-            isnullable = false)
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.labelList")
     private String               labelList;
 
     @DodoField(
@@ -204,6 +194,15 @@ public class FormModelField extends BaseEntity implements java.io.Serializable {
             showOnField = "fileStyle",
             showOnValue = "OnlyPath")
     private String               ossBucket;
+
+    @DodoField(sortSeq = 27, nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTip")
+    private String               infoTip;
+
+    @DodoField(
+            sortSeq = 29,
+            nameKey = "dodo.privilege.admin.config.FormModelField.namekey.infoTipKey",
+            infoTipKey = "dodo.privilege.admin.config.FormModelField.infoTip.infoTipKey")
+    private String               infoTipKey;
 
     @Override
     public void onSave() {
