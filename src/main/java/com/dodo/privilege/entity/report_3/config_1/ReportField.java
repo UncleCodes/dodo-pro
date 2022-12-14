@@ -80,6 +80,9 @@ public class ReportField extends BaseEntity {
     @DodoField(sortSeq = 13, nameKey = "dodo.privilege.report.config.ReportField.namekey.isShow", isnullable = false)
     private Boolean           isShow;
 
+    @DodoField(sortSeq = 14, nameKey = "dodo.privilege.report.config.ReportField.namekey.linkText", editable = false)
+    private String            linkText;
+
     @DodoField(
             sortSeq = 15,
             nameKey = "dodo.privilege.report.config.ReportField.namekey.jumpLink",
@@ -170,5 +173,14 @@ public class ReportField extends BaseEntity {
 
     public void setValueIndex(String valueIndex) {
         this.valueIndex = valueIndex;
+    }
+
+    @Column(length = 128)
+    public String getLinkText() {
+        return linkText;
+    }
+
+    public void setLinkText(String linkText) {
+        this.linkText = linkText;
     }
 }

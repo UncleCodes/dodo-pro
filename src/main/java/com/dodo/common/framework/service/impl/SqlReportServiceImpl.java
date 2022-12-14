@@ -244,6 +244,8 @@ public class SqlReportServiceImpl implements SqlReportService {
             if (StringUtils.isNotBlank(jumpLink)) {
                 jumpLink = jumpLink.trim();
                 reportField.setJumpLink(jumpLink);
+                reportField.setLinkText(StringUtils.isBlank(designBean.getLinkText().get(i)) ? "{value}" : designBean
+                        .getLinkText().get(i));
                 // 后台菜单
                 //                if (jumpLink.startsWith("{rootPath}")) {
                 //                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");

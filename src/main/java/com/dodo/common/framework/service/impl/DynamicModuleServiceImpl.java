@@ -265,6 +265,8 @@ public class DynamicModuleServiceImpl implements DynamicModuleService {
             if (StringUtils.isNotBlank(jumpLink)) {
                 jumpLink = jumpLink.trim();
                 moduleField.setJumpLink(jumpLink);
+                moduleField.setLinkText(StringUtils.isBlank(designBean.getLinkText().get(i)) ? "{value}" : designBean
+                        .getLinkText().get(i));
                 // 后台菜单
                 //                if (jumpLink.startsWith("{rootPath}")) {
                 //                    jumpLinkRight = StringUtils.substringBeforeLast(jumpLink, "?");
