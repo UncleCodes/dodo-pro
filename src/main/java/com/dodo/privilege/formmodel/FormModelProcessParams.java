@@ -26,6 +26,9 @@ public class FormModelProcessParams implements Serializable {
     private String                      formModelPostUrl     = "";
     // 表单模型的视图
     private String                      formModelProcessView = "formmodel_process";
+    // 显示的参数
+    private Map<String, Object>         displayFields        = new HashMap<String, Object>();
+
     // 自动添加的参数
     private Map<String, Object>         autoAddParams        = new HashMap<String, Object>();
     // 默认值
@@ -87,4 +90,11 @@ public class FormModelProcessParams implements Serializable {
         this.valuesMap = valuesMap;
     }
 
+    public Map<String, Object> getDisplayFields() {
+        return displayFields;
+    }
+
+    public void setDisplayFields(Map<String, Object> displayFields) {
+        this.displayFields = displayFields;
+    }
 }
